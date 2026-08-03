@@ -47,6 +47,11 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+/* Nella schermata iniziale usiamo lo scroll nativo della pagina invece di un riquadro
+   fixed a altezza fissa: su Safari iOS gli elementi "fixed" con altezza calcolata in
+   vh/dvh/svh non seguono in modo affidabile la barra degli indirizzi che appare/scompare,
+   lasciando spazio vuoto o tagliando il contenuto. Lo scroll di pagina normale non ha questo problema. */
+body.setup-active{height:auto;min-height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 body{
   font-family:-apple-system,'SF Pro Display',Helvetica,sans-serif;
   background:var(--bg);color:var(--txt);
@@ -90,9 +95,8 @@ body::after{
 
 /* ── SETUP ── */
 #setup{
-  position:fixed;top:0;left:0;right:0;height:100vh;height:100svh;height:calc(var(--vh) * 100);
+  position:relative;width:100%;min-height:100%;
   background:radial-gradient(ellipse at 50% 0%,#2b1d52 0%,var(--bg) 62%);
-  z-index:9000;overflow-y:auto;
   display:flex;flex-direction:column;align-items:center;
   padding:max(30px, calc(env(safe-area-inset-top,0px) + 20px)) 24px max(30px, calc(env(safe-area-inset-bottom,0px) + 20px));
   animation:fadein .4s var(--ease);
@@ -1053,7 +1057,7 @@ body::after{
 }
 </style>
 </head>
-<body>
+<body class="setup-active">
 <script>
 // Fix per un bug noto di Safari iOS: vh/dvh/svh calcolano male l'altezza reale
 // quando la barra degli indirizzi mostra/nasconde. Usiamo l'altezza vera della
@@ -2212,6 +2216,7 @@ function startGame() {
   G.level = 3;
 
   document.getElementById('setup').style.display = 'none';
+  document.body.classList.remove('setup-active');
   document.getElementById('hdr').style.display = '';
   document.getElementById('main').style.display = '';
   document.getElementById('nav').style.display = '';
@@ -2313,10 +2318,20 @@ function tick() {
     return;
   }
 
-  // Between shifts (e.g. 15:00-18:00): the clock freezes, waiting for you to skip ahead
+  // Tra un turno e l'altro (es. 15:00-18:00): il tempo di gioco resta fermo, ma non tutto si blocca.
+  // Lo staff non lavora più fuori turno (niente auto-accomodo, niente auto-rifornimento):
+  // tocca al manager finire a mano quello che c'è. Cucina, tavoli, pulizie e asporto già in corso
+  // continuano comunque, finché il locale non è davvero libero e si può passare al turno dopo.
   const inWindowNow = serviceWindows().some(([s, e]) => G.gameTime >= s && G.gameTime < e);
   if (!inWindowNow) {
     G.isOpen = false;
+    if (!isPremisesClear()) {
+      processQueue(minsPerTick);
+      processKitchen(minsPerTick);
+      processTables(minsPerTick);
+      processCleaning(0.5);
+      processTakeoutPayment(0.5);
+    }
     renderRestaurantView();
     renderHeader();
     return;
@@ -2929,7 +2944,16 @@ function renderRestaurantView() {
     if (G.takeoutReady.length) left.push(`${G.takeoutReady.length} asporto`);
     bannerHtml = `<span>🔒 Orario finito, ma devi ancora chiudere: ${left.join(', ')}. Senza assistente/cameriere tocca a te.</span>`;
   } else if (!inWindowNow && G.gameTime < closing) {
-    bannerHtml = `<span>👏 Turno finito! Si riparte alle ${fmtTime(nextWindowStart())}</span><button class="hire-btn hire-b" onclick="skipToNextShift()">Prossimo turno →</button>`;
+    if (!isPremisesClear()) {
+      const left = [];
+      if (G.tables.some(t => t)) left.push(`${G.tables.filter(t => t).length} tavoli`);
+      if (G.queue.length) left.push(`${G.queue.length} in coda`);
+      if (G.kitchen.length) left.push(`${G.kitchen.length} in cucina`);
+      if (G.takeoutReady.length) left.push(`${G.takeoutReady.length} asporto`);
+      bannerHtml = `<span>👏 Turno finito! Lo staff non lavora più fuori turno, finisci tu: ${left.join(', ')}.</span>`;
+    } else {
+      bannerHtml = `<span>👏 Turno finito! Si riparte alle ${fmtTime(nextWindowStart())}</span><button class="hire-btn hire-b" onclick="skipToNextShift()">Prossimo turno →</button>`;
+    }
   }
   // Only rewrite when the text actually changes, otherwise the button is recreated mid-tap and swallows clicks
   if (shiftBanner._html !== bannerHtml) {
@@ -3985,6 +4009,7 @@ function resetGame() {
 (function boot() {
   if (!loadGame()) return;
   document.getElementById('setup').style.display = 'none';
+  document.body.classList.remove('setup-active');
   document.getElementById('hdr').style.display = '';
   document.getElementById('main').style.display = '';
   document.getElementById('nav').style.display = '';
