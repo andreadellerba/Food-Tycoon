@@ -3934,6 +3934,9 @@ function loadGame() {
     G.activeMenu = new Set(data.activeMenu || []);
     G.upgrades = new Set(data.upgrades || []);
     G.ticker = null;
+    // Migrazione: il limite massimo tavoli è salito da 10 a 22, ma le partite già
+    // salvate avevano il vecchio valore scritto nel salvataggio — lo alziamo qui
+    if (G.maxTables < 22) G.maxTables = 22;
     return true;
   } catch (e) { return false; }
 }
