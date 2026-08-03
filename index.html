@@ -3256,13 +3256,20 @@ function renderStaff() {
 
 function hireStaff(roleId, stars) {
   const role = getStaffRole(roleId);
-  const candidate = (G.staffMarket[roleId] || []).find(c => c.stars === stars);
+  const market = G.staffMarket[roleId] || [];
+  const candIdx = market.findIndex(c => c.stars === stars);
+  const candidate = market[candIdx];
   if (!role || !candidate) return;
   if (!role.multiHire && hasRole(roleId)) { toast('❌ Hai già qualcuno per questo ruolo — licenzialo prima'); return; }
   if (G.money < candidate.wage) { toast('❌ Fondi insufficienti (serve almeno un giorno di stipendio)'); return; }
   const scale = { 1: 0.7, 2: 1.0, 3: 1.4 }[stars];
   G.hiredStaff.push({ id: G.staffNextId++, role: roleId, stars, wage: candidate.wage, scale, name: candidate.name });
   toast(`${role.e} ${candidate.name} (${role.name}) ${'⭐'.repeat(stars)} assunto!`);
+  // Sostituisci subito il candidato appena assunto con uno nuovo (nome e stipendio diversi):
+  // altrimenti per i ruoli assumibili più volte (es. Cameriere) si potrebbero avere più
+  // dipendenti con lo stesso nome nella stessa lista
+  const costScale = { 1: 0.8, 2: 1.4, 3: 2.2 };
+  market[candIdx] = { stars, wage: Math.round(role.baseWage * costScale[stars] * randBetween(0.9, 1.1)), name: randomItalianName() };
   renderStaff();
   checkOnboarding();
 }
