@@ -272,29 +272,28 @@ body::after{
   background:linear-gradient(180deg,rgba(30,20,56,.82),rgba(16,10,32,.94));
   backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
   border-top:1px solid var(--hair);
-  display:flex;padding:5px 4px env(safe-area-inset-bottom,5px);flex-shrink:0;
-  gap:2px;position:relative;z-index:10;
+  display:flex;padding:8px 8px calc(env(safe-area-inset-bottom,8px) + 4px);flex-shrink:0;
+  gap:6px;position:relative;z-index:10;
   box-shadow:0 -8px 26px -14px rgba(0,0,0,.95);
 }
 .nb{
-  flex:1;display:flex;flex-direction:column;align-items:center;
-  padding:6px 2px;cursor:pointer;border:none;background:transparent;border-radius:16px;
-  transition:background .25s var(--ease);position:relative;
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:11px 2px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:999px;
+  transition:background .25s var(--ease),border-color .25s,transform .2s var(--bounce),box-shadow .25s;
+  position:relative;
 }
-.nb .ni{font-size:19px;transition:transform .35s var(--bounce);display:block}
-.nb .nl{font-size:9px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--txt3);margin-top:2px;transition:color .25s}
+.nb .ni{font-size:24px;transition:transform .35s var(--bounce);display:block}
+/* Il nome resta per l'accessibilità ma è nascosto visivamente: le pill mostrano solo l'icona */
+.nb .nl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .nb:active .ni{transform:scale(.85)}
-.nb.on{background:rgba(255,255,255,.07)}
-.nb.on .nl{color:var(--amber)}
-.nb.on .ni{transform:scale(1.22) translateY(-1px);filter:drop-shadow(0 4px 10px rgba(255,149,0,.7))}
-/* Glowing indicator bar above the active tab */
-.nb.on::before{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:26px;height:3px;border-radius:999px;background:var(--grad-brand);
-  box-shadow:0 0 12px rgba(255,149,0,.9);
-  animation:navIn .35s var(--bounce);
+.nb.on{
+  background:linear-gradient(160deg, rgba(255,255,255,.24), rgba(255,255,255,.04) 65%), var(--glass2);
+  backdrop-filter:blur(14px) saturate(180%);-webkit-backdrop-filter:blur(14px) saturate(180%);
+  border-color:rgba(255,255,255,.25);
+  box-shadow:0 8px 20px -8px rgba(255,149,0,.6), inset 0 1px 0 rgba(255,255,255,.4);
+  transform:translateY(-2px);
 }
-@keyframes navIn{from{width:0;opacity:0}to{width:26px;opacity:1}}
+.nb.on .ni{transform:scale(1.18);filter:drop-shadow(0 4px 10px rgba(255,149,0,.7))}
 
 /* ── VIEWS ── */
 .view{display:none;padding:10px}
