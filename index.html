@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="setup-active">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -50,8 +50,10 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 /* Nella schermata iniziale usiamo lo scroll nativo della pagina invece di un riquadro
    fixed a altezza fissa: su Safari iOS gli elementi "fixed" con altezza calcolata in
    vh/dvh/svh non seguono in modo affidabile la barra degli indirizzi che appare/scompare,
-   lasciando spazio vuoto o tagliando il contenuto. Lo scroll di pagina normale non ha questo problema. */
-body.setup-active{height:auto;min-height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+   lasciando spazio vuoto o tagliando il contenuto. Lo scroll di pagina normale non ha questo problema.
+   Nota: deve scorrere <html> (è lui l'elemento di scroll del documento), non solo <body>. */
+html.setup-active{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+body.setup-active{height:auto;min-height:100%;overflow:visible}
 body{
   font-family:-apple-system,'SF Pro Display',Helvetica,sans-serif;
   background:var(--bg);color:var(--txt);
@@ -2216,6 +2218,7 @@ function startGame() {
   G.level = 3;
 
   document.getElementById('setup').style.display = 'none';
+  document.documentElement.classList.remove('setup-active');
   document.body.classList.remove('setup-active');
   document.getElementById('hdr').style.display = '';
   document.getElementById('main').style.display = '';
@@ -4009,6 +4012,7 @@ function resetGame() {
 (function boot() {
   if (!loadGame()) return;
   document.getElementById('setup').style.display = 'none';
+  document.documentElement.classList.remove('setup-active');
   document.body.classList.remove('setup-active');
   document.getElementById('hdr').style.display = '';
   document.getElementById('main').style.display = '';
