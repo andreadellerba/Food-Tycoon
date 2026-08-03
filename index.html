@@ -242,7 +242,24 @@ body::after{
   box-shadow:0 6px 20px -12px rgba(0,0,0,.9);
 }
 .hdr-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.rest-name{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--txt)}
+.hdr-name-wrap{display:flex;align-items:center;gap:7px;min-width:0}
+.rest-name{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Scorciatoia agli Upgrade accanto al nome — apre la scheda da qualunque schermata */
+.upg-shortcut{
+  display:flex;align-items:center;gap:4px;flex-shrink:0;
+  background:var(--glass2);border:1px solid rgba(255,149,0,.4);border-radius:999px;
+  padding:2px 8px 2px 2px;cursor:pointer;transition:transform .18s var(--bounce);
+}
+.upg-shortcut:active{transform:scale(.92)}
+.upg-shortcut .circ{
+  width:18px;height:18px;border-radius:50%;flex-shrink:0;
+  background:var(--grad-brand);color:#1a0a00;font-size:10px;
+  display:flex;align-items:center;justify-content:center;
+}
+.upg-shortcut .n{font-size:10px;font-weight:800;color:var(--amber)}
+.upg-shortcut.none{opacity:.55}
+.upg-shortcut.none .circ{background:rgba(255,255,255,.1);color:var(--txt2)}
+.upg-shortcut.none .n{color:var(--txt2)}
 .hdr-rating{display:flex;align-items:center;gap:6px;margin-bottom:7px}
 .hr-stars{color:var(--gold);font-size:13px;letter-spacing:1px;text-shadow:0 0 12px rgba(255,210,63,.5)}
 .hr-num{font-size:12px;font-weight:700;color:var(--txt2)}
@@ -292,11 +309,12 @@ body::after{
 }
 .nb{
   flex:1;display:flex;align-items:center;justify-content:center;
-  padding:13px 2px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:999px;
+  padding:15px 2px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:999px;
   transition:background .25s var(--ease),border-color .25s,transform .2s var(--bounce),box-shadow .25s;
   position:relative;
 }
-.nb .ni{font-size:23px;transition:transform .35s var(--bounce);display:block}
+/* Un pulsante in meno da quando gli Upgrade si aprono dalla scorciatoia in alto: icone più grandi con lo spazio liberato */
+.nb .ni{font-size:26px;transition:transform .35s var(--bounce);display:block}
 /* Il nome resta per l'accessibilità ma è nascosto visivamente: le pill mostrano solo l'icona */
 .nb .nl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .nb:active .ni{transform:scale(.85)}
@@ -540,46 +558,42 @@ body::after{
 }
 .menu-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--s3),transparent)}
 .menu-section-title:first-child{margin-top:0}
+/* Righe compatte: icona, nome+margine, stepper prezzo (−/+) per i piatti attivi, un
+   pulsante rotondo (✓ nel menù, + per aggiungerlo) a chiudere la riga */
 .recipe-card{
-  background:var(--glass1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-radius:20px;padding:12px;position:relative;overflow:hidden;
-  border:2px solid var(--s3);
-  box-shadow:var(--sh-sm), inset 0 1px 0 rgba(255,255,255,.06);
-  transition:border-color .3s,background .3s,transform .22s var(--bounce),box-shadow .3s;
+  display:flex;align-items:center;gap:9px;
+  background:var(--glass1);border-radius:13px;padding:7px 9px;position:relative;overflow:hidden;
+  border:1px solid var(--s3);border-left:3px solid var(--s3);
+  transition:border-color .3s,background .3s,transform .2s var(--bounce);
+  margin-bottom:4px;
 }
-.recipe-card:active{transform:scale(.99)}
-.recipe-card.active{
-  border-color:var(--green);background:rgba(0,214,143,.08);
-  box-shadow:var(--sh-sm), inset 0 0 30px -18px var(--green), inset 0 1px 0 rgba(255,255,255,.08);
+.recipe-card:active{transform:scale(.98)}
+.recipe-card.active{border-left-color:var(--green)}
+.recipe-card.locked{opacity:.4;filter:grayscale(.4)}
+.rc-ico{font-size:19px;flex-shrink:0}
+.rc-mid{flex:1;min-width:0}
+.rc-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-cat{font-size:9.5px;color:var(--txt2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.rc-margin{color:var(--green)}
+.rc-x{color:var(--red)}
+.rc-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.rc-stepper .rc-mini{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;border:none;cursor:pointer;
+  background:rgba(255,255,255,.09);color:var(--txt);font-size:13px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;transition:transform .15s var(--bounce);
 }
-/* Green rail down the left edge of dishes already on the menu */
-.recipe-card.active::before{
-  content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;
-  border-radius:999px;background:var(--grad-green);box-shadow:0 0 12px rgba(0,214,143,.8);
-}
-.recipe-card.locked{opacity:.32;filter:grayscale(.5)}
-.rc-row1{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.rc-left{display:flex;align-items:center;gap:11px;min-width:0}
-.rc-ico{font-size:27px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));flex-shrink:0}
-.rc-name{font-size:14px;font-weight:800;letter-spacing:-.2px}
-.rc-cat{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.rc-meta{display:flex;gap:12px;margin-top:9px;font-size:12px;flex-wrap:wrap;align-items:center}
-.rc-price{color:var(--gold);font-weight:800;font-variant-numeric:tabular-nums}
-.rc-margin{color:var(--green);font-weight:700}
-.rc-prep{color:var(--txt3)}
-.price-sentiment{font-weight:800;font-size:11px;padding:2px 8px;border-radius:999px}
-.price-sentiment.ps-high{color:var(--red);background:rgba(255,77,106,.14)}
-.price-sentiment.ps-mid{color:var(--txt2);background:rgba(255,255,255,.06)}
-.price-sentiment.ps-low{color:var(--green);background:rgba(0,214,143,.14)}
+.rc-stepper .rc-mini:active{transform:scale(.85)}
+.rc-price{color:var(--gold);font-weight:800;font-variant-numeric:tabular-nums;font-size:11.5px;min-width:44px;text-align:center}
 .toggle-btn{
-  padding:8px 16px;border-radius:999px;font-size:12px;font-weight:800;
-  border:none;cursor:pointer;flex-shrink:0;
-  transition:transform .2s var(--bounce),opacity .2s,box-shadow .25s;
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:900;border:none;cursor:pointer;
+  transition:transform .2s var(--bounce),opacity .2s;
 }
-.toggle-btn:active{transform:scale(.92)}
-.toggle-btn.on{background:var(--grad-green);color:#00291d;box-shadow:0 5px 16px -6px rgba(0,214,143,.85)}
-.toggle-btn.off{background:var(--s3);color:var(--txt);box-shadow:var(--sh-sm)}
-.toggle-btn.locked-btn{background:rgba(255,255,255,.05);color:var(--txt3);font-size:10px;cursor:default;border:1px solid var(--s3)}
+.toggle-btn:active{transform:scale(.85)}
+.toggle-btn.on{background:rgba(0,214,143,.18);color:var(--green);font-size:11px}
+.toggle-btn.off{background:var(--grad-brand);color:#1a0a00}
+.toggle-btn.locked-btn{width:auto;border-radius:999px;padding:3px 9px;background:rgba(255,255,255,.05);color:var(--txt3);font-size:9.5px;font-weight:800;cursor:default}
 
 /* ── STAFF VIEW ── */
 .wages-bar{
@@ -592,48 +606,48 @@ body::after{
 }
 .wb-label{font-size:12px;color:var(--txt2);font-weight:600}
 .wb-val{font-size:17px;font-weight:900;color:var(--red);font-variant-numeric:tabular-nums;text-shadow:0 0 16px rgba(255,77,106,.5)}
-.staff-list{display:flex;flex-direction:column;gap:8px}
+.staff-list{display:flex;flex-direction:column;gap:6px}
 .staff-card{
-  background:var(--glass1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-radius:20px;padding:12px;position:relative;overflow:hidden;
-  border:2px solid var(--s3);
-  box-shadow:var(--sh-sm), inset 0 1px 0 rgba(255,255,255,.06);
-  transition:border-color .3s,background .3s,box-shadow .3s;
+  background:var(--glass1);border-radius:14px;padding:8px 10px;position:relative;overflow:hidden;
+  border:1px solid var(--s3);border-left:3px solid var(--s3);
+  transition:border-color .3s,background .3s;
 }
-.staff-card.hired-c{
-  border-color:var(--green);background:rgba(0,214,143,.07);
-  box-shadow:var(--sh-sm), inset 0 0 34px -20px var(--green), inset 0 1px 0 rgba(255,255,255,.08);
-}
-.staff-card.hired-c::before{
-  content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;
-  border-radius:999px;background:var(--grad-green);box-shadow:0 0 12px rgba(0,214,143,.8);
-}
+.staff-card.hired-c{border-left-color:var(--green)}
 .sc-row1{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.sc-left{display:flex;align-items:center;gap:11px;min-width:0}
-.sc-ico{font-size:27px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));flex-shrink:0}
-.sc-name{font-size:14px;font-weight:800;letter-spacing:-.2px}
-.sc-wage{font-size:12px;color:var(--red);font-variant-numeric:tabular-nums;font-weight:700}
-.sc-count{font-size:11px;color:var(--green);margin-top:3px;font-weight:700}
-.sc-eff{font-size:11px;color:var(--txt2);margin-top:7px;line-height:1.5}
+.sc-left{display:flex;align-items:center;gap:9px;min-width:0;flex:1}
+.sc-ico{font-size:19px;flex-shrink:0}
+.sc-name{font-size:11.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-wage{font-size:10px;color:var(--gold);font-variant-numeric:tabular-nums;font-weight:700}
+.sc-count{font-size:9.5px;color:var(--green);margin-top:1px;font-weight:700}
+.sc-role{font-size:9.5px;color:var(--txt3);margin-top:1px}
 .hire-btn{
-  padding:9px 17px;border-radius:999px;font-size:12px;font-weight:800;
-  border:none;cursor:pointer;flex-shrink:0;
-  transition:transform .2s var(--bounce),opacity .2s,box-shadow .25s;
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;
+  border:none;cursor:pointer;
+  transition:transform .2s var(--bounce),opacity .2s;
 }
-.hire-btn:active{transform:scale(.92);opacity:.85}
-.hire-btn.hire-b{background:var(--grad-brand);color:#1a0a00;box-shadow:0 6px 18px -7px rgba(255,61,154,.85)}
-.hire-btn.fire-b{background:rgba(255,77,106,.16);color:var(--red);border:1px solid rgba(255,77,106,.42)}
-.hire-btn.locked-b{background:rgba(255,255,255,.05);color:var(--txt3);font-size:10px;cursor:default;border:1px solid var(--s3)}
-.hire-btn.poor-b{background:rgba(255,255,255,.05);color:var(--txt3);cursor:default;border:1px solid var(--s3)}
-.candidates-wrap{display:flex;flex-direction:column;gap:6px;margin-top:11px}
+.hire-btn:active{transform:scale(.85);opacity:.85}
+.hire-btn.hire-b{background:var(--grad-brand);color:#1a0a00}
+.hire-btn.fire-b{background:rgba(255,77,106,.16);color:var(--red);border:1px solid rgba(255,77,106,.42);font-size:9px}
+.hire-btn.locked-b{width:auto;border-radius:999px;padding:3px 9px;background:rgba(255,255,255,.05);color:var(--txt3);font-size:9.5px;font-weight:800;cursor:default}
+.hire-btn.poor-b{width:auto;border-radius:999px;padding:3px 9px;background:rgba(255,255,255,.05);color:var(--txt3);cursor:default}
+.candidates-wrap{display:flex;flex-direction:column;gap:4px;margin-top:7px}
 .candidate-row{
   display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);
-  border:1px solid var(--hair);border-radius:14px;padding:8px 10px;
+  border:1px solid var(--hair);border-radius:11px;padding:6px 9px;
   transition:background .25s,border-color .25s,transform .2s var(--bounce);
 }
-.candidate-row:active{transform:scale(.985)}
-.cand-stars{color:var(--gold);font-size:12px;flex:1;text-shadow:0 0 10px rgba(255,210,63,.45)}
-.cand-wage{font-size:11px;color:var(--txt2);font-variant-numeric:tabular-nums;font-weight:700}
+.candidate-row:active{transform:scale(.98)}
+.cand-stars{color:var(--gold);font-size:11px;text-shadow:0 0 10px rgba(255,210,63,.45)}
+.cand-wage{font-size:10px;color:var(--txt2);font-variant-numeric:tabular-nums;font-weight:700;flex-shrink:0}
+.cand-btn{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;
+  border:none;cursor:pointer;transition:transform .2s var(--bounce);
+}
+.cand-btn:active{transform:scale(.85)}
+.cand-btn.buy-b{background:var(--grad-brand);color:#1a0a00}
+.cand-btn.cancel-b{background:rgba(255,77,106,.16);color:var(--red);border:1px solid rgba(255,77,106,.42);font-size:10px}
 
 /* ── LOCATIONS VIEW ── */
 .loc-cards{display:flex;flex-direction:column;gap:10px}
@@ -698,15 +712,18 @@ body::after{
 .uc-name{font-size:12px;font-weight:800;line-height:1.2}
 .uc-cost{font-size:11px;color:var(--gold);font-variant-numeric:tabular-nums;font-weight:700}
 .uc-desc{font-size:10px;color:var(--txt2);margin-top:7px;line-height:1.4}
+/* Bottone acquista come cerchio con + invece di pill piena col testo */
 .upg-btn{
-  padding:7px 11px;border-radius:999px;font-size:10px;font-weight:800;
-  border:none;cursor:pointer;flex-shrink:0;white-space:nowrap;
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:900;
+  border:none;cursor:pointer;
   transition:transform .2s var(--bounce),box-shadow .25s;
 }
-.upg-btn:active{transform:scale(.9)}
+.upg-btn:active{transform:scale(.88)}
 .upg-btn.buy-u{background:var(--grad-brand);color:#1a0a00;box-shadow:0 5px 14px -5px rgba(255,61,154,.85)}
-.upg-btn.cant-u{background:rgba(255,255,255,.05);color:var(--txt3);cursor:default;border:1px solid var(--s3)}
-.upg-btn.done-u{background:rgba(0,214,143,.16);color:var(--green);cursor:default}
+.upg-btn.cant-u{background:rgba(255,255,255,.05);color:var(--txt3);cursor:default;border:1px solid var(--s3);font-size:9px}
+.upg-btn.done-u{background:rgba(0,214,143,.16);color:var(--green);cursor:default;font-size:13px}
 
 /* ── MODALS / OVERLAYS ── */
 .overlay{
@@ -942,25 +959,30 @@ body::after{
   color:var(--txt3);margin:16px 0 7px;display:flex;align-items:center;gap:8px;
 }
 .ing-cat-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--s3),transparent)}
-.ing-row{
-  display:flex;align-items:center;gap:9px;
-  background:var(--glass1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid var(--hair);border-radius:16px;padding:9px 11px;margin-bottom:6px;
-  transition:border-color .3s,box-shadow .3s,transform .2s var(--bounce);
+/* Griglia più densa: card più grandi degli ingredienti stanno più larghe di prima,
+   se in una riga ce ne stanno meno pazienza — icona, nome, scorte e prezzo restano leggibili */
+.ing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:9px}
+.ing-cell{
+  background:var(--glass1);border-radius:16px;border:1.5px solid var(--s3);
+  padding:11px 8px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;
+  transition:border-color .3s,transform .2s var(--bounce);
 }
-.ing-row:active{transform:scale(.99)}
-.ing-row.ing-row-active{
-  border-color:var(--green);
-  box-shadow:0 0 0 1px rgba(0,214,143,.25), inset 0 0 26px -16px var(--green);
+.ing-cell:active{transform:scale(.96)}
+.ing-cell.ing-row-active{border-color:var(--green)}
+.ing-cell .ing-ico{font-size:25px;filter:drop-shadow(0 3px 7px rgba(0,0,0,.5))}
+.ing-cell .ing-name{font-size:10.5px;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ing-cell .ing-stock{font-size:13px;font-weight:900}
+.ing-cell .ing-price{font-size:10px;color:var(--txt2);font-weight:700}
+.ing-plus{
+  position:absolute;top:-6px;right:-6px;width:23px;height:23px;border-radius:50%;
+  background:var(--grad-brand);color:#1a0a00;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;border:none;cursor:pointer;box-shadow:0 4px 10px -3px rgba(255,61,154,.7);
+  transition:transform .2s var(--bounce);
 }
-.ing-ico{font-size:19px;filter:drop-shadow(0 3px 7px rgba(0,0,0,.5))}
-.ing-info{flex:1;min-width:0}
-.ing-name{font-size:12px;font-weight:700}
-.ing-stock{font-size:11px;color:var(--txt2);margin-top:1px}
-.ing-stock .stock-low{color:var(--red);text-shadow:0 0 10px rgba(255,77,106,.6)}
-.ing-stock .stock-mid{color:var(--gold)}
-.ing-stock .stock-high{color:var(--green)}
-.ing-price{font-size:11px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ing-plus:active{transform:scale(.85)}
+.ing-stock.stock-low{color:var(--red)}
+.ing-stock.stock-mid{color:var(--gold)}
+.ing-stock.stock-high{color:var(--green)}
 .ing-price.up{color:var(--red)}
 .ing-price.down{color:var(--green)}
 .mini-btn{
@@ -998,24 +1020,6 @@ body::after{
 .sup-ingr-row .si-name{flex:1;color:var(--txt2)}
 .sup-ingr-row .si-price{color:var(--gold);font-weight:700;font-size:11px;white-space:nowrap}
 .sup-ingr-row.locked-row{opacity:.55}
-
-/* MENU PRICE STEPPER */
-.price-stepper{
-  display:flex;align-items:center;gap:7px;margin-top:10px;
-  background:rgba(255,255,255,.05);border:1px solid var(--hair);
-  border-radius:999px;padding:5px 10px 5px 5px;
-}
-.price-btn{
-  width:28px;height:28px;border-radius:999px;background:rgba(255,255,255,.1);
-  color:var(--txt);border:1px solid var(--hair);font-size:15px;font-weight:800;
-  cursor:pointer;line-height:1;transition:transform .18s var(--bounce),background .2s;
-}
-.price-btn:active{transform:scale(.85);background:var(--amber);color:#1a0a00}
-.price-val{
-  font-size:14px;font-weight:900;color:var(--gold);min-width:56px;text-align:center;
-  font-variant-numeric:tabular-nums;text-shadow:0 0 14px rgba(255,210,63,.5);
-}
-.price-base{font-size:10px;color:var(--txt3);line-height:1.3}
 
 /* ── ALERT BANNERS (kitchen closed / shift break) ── */
 #chef-banner{
@@ -1107,7 +1111,12 @@ body::after{
 <!-- HEADER -->
 <div id="hdr" style="display:none">
   <div class="hdr-row1">
-    <div class="rest-name" id="hdr-name">La Bella Italia</div>
+    <div class="hdr-name-wrap">
+      <div class="rest-name" id="hdr-name">La Bella Italia</div>
+      <button class="upg-shortcut" id="upg-shortcut" onclick="showView('upg', null)" title="Upgrade">
+        <span class="circ">⬆️</span><span class="n" id="upg-shortcut-n">0</span>
+      </button>
+    </div>
     <div class="hstat time-s"><span id="hdr-time">11:00</span> · Giorno <span id="hdr-day">1</span></div>
   </div>
   <div class="hdr-rating">
@@ -1297,9 +1306,6 @@ body::after{
   </button>
   <button class="nb" onclick="showView('locs',this)">
     <span class="ni">📍</span><span class="nl">Locali</span>
-  </button>
-  <button class="nb" onclick="showView('upg',this)">
-    <span class="ni">⬆️</span><span class="nl">Upgrade</span>
   </button>
 </div>
 
@@ -2892,7 +2898,18 @@ function renderHeader() {
     document.getElementById('hr-stars').textContent = '☆☆☆☆☆';
     document.getElementById('hr-num').textContent = 'Nuovo locale';
   }
+  updateUpgradeShortcut();
   positionSpeedControls();
+}
+
+// Conta gli upgrade sbloccati e comprabili adesso, per il badge accanto al nome del locale
+function updateUpgradeShortcut() {
+  const btn = document.getElementById('upg-shortcut');
+  if (!btn) return;
+  let n = UPGRADES_DEF.filter(u => !G.upgrades.has(u.id) && G.level >= u.lvl && G.money >= u.cost).length;
+  if (G.tableCount < G.maxTables && G.money >= G.tableCost) n++;
+  document.getElementById('upg-shortcut-n').textContent = n;
+  btn.classList.toggle('none', n === 0);
 }
 
 // ═══════════════════════════════════════════════════
@@ -3156,33 +3173,41 @@ function renderRecipeCard(r, readOnly) {
   const margin = price > 0 ? ((price - cost) / price * 100).toFixed(0) : 0;
   const stock = r.ingr ? Math.min(...Object.entries(r.ingr).map(([id, qty]) => Math.floor((G.inventory[id] || 0) / qty))) : 99;
 
-  let btnHtml = '';
-  if (!readOnly) {
-    if (isLocked) btnHtml = `<button class="toggle-btn locked-btn">Lv ${r.lvl}</button>`;
-    else if (isActive) btnHtml = `<button class="toggle-btn on" disabled>✓ Nel menù</button>`;
-    else btnHtml = `<button class="toggle-btn off" onclick="toggleMenu('${r.id}')">+ Aggiungi</button>`;
+  let metaTxt;
+  if (readOnly || isLocked) {
+    metaTxt = isLocked ? `Richiede livello ${r.lvl}` : r.cat;
+  } else if (isActive) {
+    metaTxt = `<span class="rc-margin">${margin}%</span> · ${priceSentimentLabel(r)}${stock <= 0 ? ' · <span class="rc-x">esaurito</span>' : stock < 10 ? ` · scorte ${stock}` : ''}`;
+  } else {
+    metaTxt = r.cat;
+  }
+
+  let priceHtml, btnHtml = '';
+  if (!readOnly && isActive) {
+    priceHtml = `<div class="rc-stepper">
+      <button class="rc-mini" onclick="setPrice('${r.id}',-0.5)">−</button>
+      <span class="rc-price">€${price.toFixed(2)}</span>
+      <button class="rc-mini" onclick="setPrice('${r.id}',0.5)">+</button>
+    </div>`;
+    btnHtml = `<button class="toggle-btn on" disabled>✓</button>`;
+  } else {
+    priceHtml = `<span class="rc-price">€${price.toFixed(2)}</span>`;
+    if (!readOnly) {
+      btnHtml = isLocked
+        ? `<button class="toggle-btn locked-btn">Lv ${r.lvl}</button>`
+        : `<button class="toggle-btn off" onclick="toggleMenu('${r.id}')">+</button>`;
+    }
   }
 
   return `
     <div class="recipe-card${isLocked ? ' locked' : isActive ? ' active' : ''}">
-      <div class="rc-row1">
-        <div class="rc-left">
-          <span class="rc-ico">${r.e}</span>
-          <div><div class="rc-name">${r.name}</div><div class="rc-cat">${r.cat}${readOnly ? '' : ` · ${stock <= 0 ? '<span style="color:var(--red)">scorte esaurite</span>' : `scorte: <span style="color:${stock < 10 ? 'var(--red)' : stock <= 25 ? 'var(--gold)' : 'var(--green)'}">${stock}</span> porzioni`}`}</div></div>
-        </div>
-        ${btnHtml}
+      <span class="rc-ico">${r.e}</span>
+      <div class="rc-mid">
+        <div class="rc-name">${r.name}</div>
+        <div class="rc-cat">${metaTxt}</div>
       </div>
-      <div class="rc-meta">
-        ${readOnly ? `<span class="rc-price">€${price.toFixed(2)}</span>` : `<span class="rc-margin">${margin}% margine</span><span class="price-sentiment ${priceSentimentCls(r)}">${priceSentimentLabel(r)}</span>`}
-        <span class="rc-prep">⏱ ${r.prep}'</span>
-      </div>
-      ${(!readOnly && !isLocked) ? `
-      <div class="price-stepper">
-        <button class="price-btn" onclick="setPrice('${r.id}',-0.5)">−</button>
-        <span class="price-val">€${price.toFixed(2)}</span>
-        <button class="price-btn" onclick="setPrice('${r.id}',0.5)">+</button>
-        <span class="price-base">base €${r.p.toFixed(2)} · costo €${cost.toFixed(2)}</span>
-      </div>` : ''}
+      ${priceHtml}
+      ${btnHtml}
     </div>
   `;
 }
@@ -3265,19 +3290,19 @@ function renderStaff() {
 
     if (isLocked) {
       availableCards.push(`<div class="staff-card">
-        <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div><div class="sc-name">${role.name}</div><div class="sc-wage">Richiede Livello ${role.req}</div></div></div><button class="hire-btn locked-b">Lv ${role.req}</button></div>
-        <div class="sc-eff">${role.desc}</div>
+        <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div><div class="sc-name">${role.name}</div><div class="sc-role">Richiede Livello ${role.req}</div></div></div><button class="hire-btn locked-b">Lv${role.req}</button></div>
       </div>`);
       return;
     }
 
+    // Nome per intero (niente abbreviazioni), solo il pulsante diventa un cerchio +
     const candidates = G.staffMarket[role.id] || [];
     const candRows = candidates.map(c => {
       const canAfford = G.money >= c.wage;
       return `<div class="candidate-row">
-        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--txt)">${c.name}</div><span class="cand-stars">${'⭐'.repeat(c.stars)}${'☆'.repeat(3 - c.stars)}</span></div>
+        <div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div><span class="cand-stars">${'⭐'.repeat(c.stars)}${'☆'.repeat(3 - c.stars)}</span></div>
         <span class="cand-wage">€${c.wage}/g</span>
-        <button class="mini-btn ${canAfford ? 'buy-b' : 'cancel-b'}" onclick="hireStaff('${role.id}',${c.stars})">Assumi</button>
+        <button class="cand-btn ${canAfford ? 'buy-b' : 'cancel-b'}" onclick="hireStaff('${role.id}',${c.stars})" title="Assumi">+</button>
       </div>`;
     }).join('');
 
@@ -3285,19 +3310,17 @@ function renderStaff() {
       if (hiredAll.length) {
         const hiredRows = hiredAll.map(h => `
           <div class="candidate-row">
-            <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--txt)">${h.name} ${'⭐'.repeat(h.stars)}</div></div>
+            <div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h.name} ${'⭐'.repeat(h.stars)}</div></div>
             <span class="cand-wage">€${h.wage}/g</span>
-            <button class="mini-btn cancel-b" onclick="fireStaff('${role.id}',${h.id})">Licenzia</button>
+            <button class="cand-btn cancel-b" onclick="fireStaff('${role.id}',${h.id})" title="Licenzia">✕</button>
           </div>`).join('');
         hiredCards.push(`<div class="staff-card hired-c">
           <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div><div class="sc-name">${role.name}</div><div class="sc-count">✓ ${hiredAll.length} in servizio</div></div></div></div>
-          <div class="sc-eff">${role.desc}</div>
           <div class="candidates-wrap">${hiredRows}</div>
         </div>`);
       }
       availableCards.push(`<div class="staff-card">
         <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div class="sc-name">${role.name}${hiredAll.length ? ` (${hiredAll.length} già assunti)` : ''}</div></div></div>
-        <div class="sc-eff">${role.desc}</div>
         <div class="candidates-wrap">${candRows}</div>
       </div>`);
       return;
@@ -3306,13 +3329,11 @@ function renderStaff() {
     const hired = hiredAll[0];
     if (hired) {
       hiredCards.push(`<div class="staff-card hired-c">
-        <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div><div class="sc-name">${hired.name} ${'⭐'.repeat(hired.stars)}</div><div style="font-size:10px;color:var(--txt3)">${role.name}</div><div class="sc-wage">€${hired.wage}/giorno</div><div class="sc-count">✓ In servizio</div></div></div><button class="hire-btn fire-b" onclick="fireStaff('${role.id}')">Licenzia</button></div>
-        <div class="sc-eff">${role.desc}</div>
+        <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div><div class="sc-name">${hired.name} ${'⭐'.repeat(hired.stars)}</div><div class="sc-role">${role.name} · <span class="sc-wage">€${hired.wage}/g</span></div></div></div><button class="hire-btn fire-b" onclick="fireStaff('${role.id}')" title="Licenzia">✕</button></div>
       </div>`);
     } else {
       availableCards.push(`<div class="staff-card">
         <div class="sc-row1"><div class="sc-left"><span class="sc-ico">${role.e}</span><div class="sc-name">${role.name}</div></div></div>
-        <div class="sc-eff">${role.desc}</div>
         <div class="candidates-wrap">${candRows}</div>
       </div>`);
     }
@@ -3717,8 +3738,8 @@ function renderUpgrades() {
           <div><div class="uc-name">Tavoli</div><div class="uc-cost">${G.tableCount}/${G.maxTables}</div></div>
         </div>
         ${tableMaxed
-          ? `<button class="upg-btn done-u">✓ Max</button>`
-          : `<button class="upg-btn ${tableCanAfford ? 'buy-u' : 'cant-u'}" onclick="buyTable()">+1 · ${fmt(G.tableCost)}</button>`}
+          ? `<button class="upg-btn done-u">✓</button>`
+          : `<button class="upg-btn ${tableCanAfford ? 'buy-u' : 'cant-u'}" onclick="buyTable()" title="${fmt(G.tableCost)}">+</button>`}
       </div>
       <div class="uc-desc">Più tavoli, più coperti in sala. ${G.tableCost}€ ciascuno, fino a ${G.maxTables}.</div>
     </div>`;
@@ -3728,10 +3749,10 @@ function renderUpgrades() {
     const levelOk = G.level >= upg.lvl;
     const canAfford = G.money >= upg.cost;
     let btnHtml;
-    if (bought) btnHtml = `<button class="upg-btn done-u">✓ Attivo</button>`;
-    else if (!levelOk) btnHtml = `<button class="upg-btn cant-u">Lv ${upg.lvl}</button>`;
-    else if (!canAfford) btnHtml = `<button class="upg-btn cant-u">${fmt(upg.cost)}</button>`;
-    else btnHtml = `<button class="upg-btn buy-u" onclick="buyUpgrade('${upg.id}')">Acquista</button>`;
+    if (bought) btnHtml = `<button class="upg-btn done-u">✓</button>`;
+    else if (!levelOk) btnHtml = `<button class="upg-btn cant-u" title="Richiede livello ${upg.lvl}">Lv${upg.lvl}</button>`;
+    else if (!canAfford) btnHtml = `<button class="upg-btn cant-u" title="${fmt(upg.cost)}">+</button>`;
+    else btnHtml = `<button class="upg-btn buy-u" onclick="buyUpgrade('${upg.id}')" title="${fmt(upg.cost)}">+</button>`;
 
     return `
       <div class="upg-card${bought ? ' bought-u' : ''}">
@@ -3800,7 +3821,7 @@ function renderIngredients() {
   wrap.innerHTML = mgrNote + legend + ING_CAT_ORDER.map(cat => {
     const items = INGREDIENTS_DEF.filter(i => i.cat === cat && relevant.has(i.id));
     if (!items.length) return '';
-    const rows = items.map(i => {
+    const cells = items.map(i => {
       const stock = G.inventory[i.id] || 0;
       const stockCls = stock < 10 ? 'stock-low' : stock <= 25 ? 'stock-mid' : 'stock-high';
       const price = ingrSpotPrice(i.id);
@@ -3808,17 +3829,16 @@ function renderIngredients() {
       const contracted = dailyContractQty(i.id);
       const inUse = active.has(i.id);
       return `
-        <div class="ing-row${inUse ? ' ing-row-active' : ''}">
+        <div class="ing-cell${inUse ? ' ing-row-active' : ''}">
+          <button class="ing-plus" onclick="buySpot('${i.id}',10)" title="+10">+</button>
           <span class="ing-ico">${i.e}</span>
-          <div class="ing-info">
-            <div class="ing-name">${i.name}</div>
-            <div class="ing-stock">Scorte: <b class="${stockCls}">${stock}</b>${contracted ? ` · +${contracted}/g da contratto` : ''}</div>
-          </div>
+          <span class="ing-name">${i.name}</span>
+          <span class="ing-stock ${stockCls}">${stock}</span>
           <span class="ing-price ${priceCls}">€${price.toFixed(2)}</span>
-          <button class="mini-btn buy-b" onclick="buySpot('${i.id}',10)">+10</button>
+          ${contracted ? `<span style="font-size:8px;color:var(--purple);font-weight:700">+${contracted}/g</span>` : ''}
         </div>`;
     }).join('');
-    return `<div class="ing-cat-title">${ING_CAT_LABEL[cat]}</div>${rows}`;
+    return `<div class="ing-cat-title">${ING_CAT_LABEL[cat]}</div><div class="ing-grid">${cells}</div>`;
   }).join('');
 }
 
