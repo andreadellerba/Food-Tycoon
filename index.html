@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Il Mio Ristorante</title>
+<title>Food Tycoon</title>
 
 <!-- Installabile dalla home del telefono: si apre a schermo intero, senza barre del browser -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Il Mio Ristorante">
+<meta name="apple-mobile-web-app-title" content="Food Tycoon">
 <meta name="theme-color" content="#0B0716">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230B0716'/%3E%3Ctext y='128' x='90' font-size='104' text-anchor='middle'%3E%F0%9F%8D%95%3C/text%3E%3C/svg%3E">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%8D%95%3C/text%3E%3C/svg%3E">
@@ -96,23 +96,30 @@ body::after{
   padding:30px 24px;
   animation:fadein .4s var(--ease);
 }
-.setup-logo{
-  font-size:64px;margin-bottom:10px;
-  filter:drop-shadow(0 10px 26px rgba(255,149,0,.55));
-  animation:logoFloat 3.4s ease-in-out infinite;
+.setup-logos{display:flex;gap:9px;justify-content:center;align-items:center;margin-bottom:12px}
+.setup-logos span{
+  font-size:32px;display:block;
+  filter:drop-shadow(0 8px 20px rgba(255,149,0,.5));
+  animation:logoFloat 3.2s ease-in-out infinite;
 }
+.setup-logos span:nth-child(2){animation-delay:.18s}
+.setup-logos span:nth-child(3){animation-delay:.36s}
+.setup-logos span:nth-child(4){animation-delay:.54s}
+.setup-logos span:nth-child(5){animation-delay:.72s}
+.setup-logos span:nth-child(6){animation-delay:.9s}
 @keyframes logoFloat{
-  0%,100%{transform:translateY(0) rotate(-4deg) scale(1)}
-  50%    {transform:translateY(-10px) rotate(4deg) scale(1.06)}
+  0%,100%{transform:translateY(0) rotate(-5deg) scale(1)}
+  50%    {transform:translateY(-11px) rotate(5deg) scale(1.09)}
 }
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 .setup-title{
-  font-size:32px;font-weight:900;letter-spacing:-1px;
-  background:linear-gradient(100deg,#FF9500,#FF3D9A,#A855F7,#FF9500);
+  font-size:40px;font-weight:900;letter-spacing:1px;
+  background:linear-gradient(100deg,#FF9500,#FF3D9A,#A855F7,#FFD23F,#FF9500);
   background-size:300% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;
   text-align:center;margin-bottom:4px;
   animation:gradShift 6s linear infinite;
+  filter:drop-shadow(0 6px 22px rgba(255,61,154,.35));
 }
 @keyframes gradShift{to{background-position:300% 0}}
 .setup-sub{font-size:13px;color:var(--txt2);text-align:center;margin-bottom:26px}
@@ -165,13 +172,39 @@ body::after{
 .zone-opt .zo-name{font-size:13px;font-weight:800;color:var(--txt)}
 .zone-opt .zo-addr{font-size:11px;color:var(--txt2)}
 .zone-opt .zo-rent{font-size:11px;font-weight:800;white-space:nowrap}
+/* Opzioni orario non applicabili al tipo scelto: visibili ma non selezionabili */
+.type-opt.opt-disabled{
+  opacity:.34;filter:grayscale(.7);cursor:default;pointer-events:none;
+  border-style:dashed;
+}
+.type-opt.opt-disabled span{transform:none}
+
+/* Riepilogo orari + affitto, aggiornato in base a tipo/turno/zona */
+.setup-recap{
+  width:100%;margin-bottom:18px;border-radius:18px;padding:13px 15px;
+  background:var(--glass2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--hair);
+  box-shadow:var(--sh-sm), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.recap-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 0;font-size:13px}
+.recap-row+.recap-row{border-top:1px solid rgba(255,255,255,.07)}
+.recap-lbl{color:var(--txt2);display:flex;align-items:center;gap:7px}
+.recap-val{font-weight:800;color:var(--txt);font-variant-numeric:tabular-nums;text-align:right}
+.recap-val.gold{color:var(--gold);text-shadow:0 0 14px rgba(255,210,63,.45)}
+.recap-note{font-size:11px;color:var(--txt3);margin-top:7px;line-height:1.45}
+
 .start-btn{
   width:100%;padding:16px;border-radius:999px;background:var(--grad-brand);
   color:#1a0a00;font-size:17px;font-weight:900;border:none;cursor:pointer;
   letter-spacing:.3px;position:relative;overflow:hidden;
-  transition:transform .18s var(--bounce),box-shadow .25s;
+  transition:transform .18s var(--bounce),box-shadow .25s,opacity .25s;
   box-shadow:0 10px 30px -10px rgba(255,61,154,.75), inset 0 1px 0 rgba(255,255,255,.35);
 }
+.start-btn:disabled{
+  background:rgba(255,255,255,.07);color:var(--txt3);cursor:default;
+  box-shadow:none;border:1px solid var(--s3);
+}
+.start-btn:disabled::after{display:none}
 /* Light sweep across primary buttons */
 .start-btn::after,.next-btn::after,.lu-btn::after{
   content:'';position:absolute;top:0;left:-60%;width:45%;height:100%;
@@ -1014,11 +1047,13 @@ body::after{
 
 <!-- SETUP SCREEN -->
 <div id="setup">
-  <div class="setup-logo">🍕</div>
-  <div class="setup-title">Il Mio Ristorante</div>
-  <div class="setup-sub">Costruisci il tuo impero culinario</div>
+  <div class="setup-logos">
+    <span>🍕</span><span>🍝</span><span>🍸</span><span>☕</span><span>🍨</span><span>🍺</span>
+  </div>
+  <div class="setup-title">FOOD TYCOON</div>
+  <div class="setup-sub">Costruisci il tuo impero della ristorazione</div>
   <div class="setup-label">Nome del locale</div>
-  <input class="setup-input" id="rest-name-inp" type="text" placeholder="es. La Bella Italia" maxlength="24">
+  <input class="setup-input" id="rest-name-inp" type="text" placeholder="es. La Bella Italia" maxlength="24" oninput="onNameInput()">
   <div class="setup-label">Tipo di locale</div>
   <div class="type-row">
     <div class="type-opt sel" data-type="pizzeria" onclick="selType(this)"><span>🍕</span><b>Pizzeria</b></div>
@@ -1036,7 +1071,8 @@ body::after{
   </div>
   <div class="setup-label">Zona della città — incide sull'affitto</div>
   <div class="zone-row" id="zone-row"></div>
-  <button class="start-btn" onclick="startGame()">Apri il Locale 🚀</button>
+  <div class="setup-recap" id="setup-recap"></div>
+  <button class="start-btn" id="start-btn" onclick="startGame()" disabled>Scegli un nome per iniziare</button>
 </div>
 
 <!-- HEADER -->
@@ -1996,24 +2032,31 @@ function selType(el) {
   el.classList.add('sel');
   chosenType = el.dataset.type;
 
-  // Bar/Pub/Gelateria run a single fixed shift — the pranzo/cena/tutto il giorno choice doesn't apply to them
+  // Bar/Pub/Gelateria hanno un turno unico: le opzioni restano visibili ma non cliccabili
   const shifts = TYPE_SHIFTS[chosenType] || TYPE_SHIFTS.pizzeria;
-  const row = document.getElementById('openmode-row');
-  const label = document.getElementById('openmode-label');
-  if (shifts.single) {
-    row.style.display = 'none';
-    label.textContent = `Orari di apertura — fissi: ${fmtTime(shifts.single[0])}–${fmtTime(shifts.single[1])}`;
-  } else {
-    row.style.display = '';
-    label.textContent = 'Orari di apertura';
+  const single = !!shifts.single;
+  document.querySelectorAll('.type-opt[data-mode]').forEach(e => {
+    e.classList.toggle('opt-disabled', single);
+    if (single) e.classList.remove('sel');
+  });
+  if (!single) {
+    // Ripristina la selezione corrente quando si torna a un tipo con turni scelti
+    const active = document.querySelector(`.type-opt[data-mode="${chosenOpenMode}"]`);
+    if (active) active.classList.add('sel');
   }
+  document.getElementById('openmode-label').textContent = single
+    ? 'Orari di apertura — turno unico, non modificabile'
+    : 'Orari di apertura';
+  updateSetupRecap();
 }
 
 let chosenOpenMode = 'both';
 function selOpenMode(el) {
+  if (el.classList.contains('opt-disabled')) return;
   document.querySelectorAll('.type-opt[data-mode]').forEach(e => e.classList.remove('sel'));
   el.classList.add('sel');
   chosenOpenMode = el.dataset.mode;
+  updateSetupRecap();
 }
 
 let chosenZone = 'semicentro';
@@ -2036,13 +2079,59 @@ function selZone(el) {
   el.classList.add('sel');
   chosenZone = el.dataset.zone;
   chosenZoneAddress = el.dataset.addr;
+  updateSetupRecap();
 }
 let chosenZoneAddress = '';
+
+// Il nome è obbligatorio: senza, il pulsante di avvio resta bloccato
+function onNameInput() {
+  const name = document.getElementById('rest-name-inp').value.trim();
+  const btn = document.getElementById('start-btn');
+  btn.disabled = !name;
+  btn.textContent = name ? `Apri "${name}" 🚀` : 'Scegli un nome per iniziare';
+}
+
+// Orari e affitto reali del tipo selezionato, prima ancora di aprire
+function updateSetupRecap() {
+  const box = document.getElementById('setup-recap');
+  if (!box) return;
+  const shifts = TYPE_SHIFTS[chosenType] || TYPE_SHIFTS.pizzeria;
+  const loc = getLocDef(chosenType) || getLocDef('pizzeria');
+  const zone = ZONES.find(z => z.id === chosenZone) || ZONES[1];
+
+  let windows, modeMult;
+  if (shifts.single) {
+    windows = [shifts.single];
+    modeMult = 1;
+  } else if (chosenOpenMode === 'pranzo') {
+    windows = [shifts.pranzo]; modeMult = 0.5;
+  } else if (chosenOpenMode === 'cena') {
+    windows = [shifts.cena]; modeMult = 0.6;
+  } else {
+    windows = [shifts.pranzo, shifts.cena]; modeMult = 1;
+  }
+
+  const hoursTxt = windows.map(([s, e]) => `${fmtTime(s)}–${fmtTime(e)}`).join('  ·  ');
+  const rent = loc.rent * zone.rentMult * modeMult;
+  const custPct = Math.round((zone.custMult - 1) * 100);
+  const typeName = { pizzeria:'🍕 Pizzeria', ristorante:'🍽️ Ristorante', trattoria:'🍝 Trattoria', gelateria:'🍨 Gelateria', bar:'☕ Bar', pub:'🍺 Pub' }[chosenType];
+
+  box.innerHTML = `
+    <div class="recap-row"><span class="recap-lbl">🏪 Locale</span><span class="recap-val">${typeName}</span></div>
+    <div class="recap-row"><span class="recap-lbl">🕐 Orari</span><span class="recap-val">${hoursTxt}</span></div>
+    <div class="recap-row"><span class="recap-lbl">📍 Zona</span><span class="recap-val">${zone.e} ${zone.name}${custPct ? ` (${custPct > 0 ? '+' : ''}${custPct}% clienti)` : ''}</span></div>
+    <div class="recap-row"><span class="recap-lbl">🏠 Affitto</span><span class="recap-val gold">${fmt(rent)} / giorno</span></div>
+    ${shifts.single ? `<div class="recap-note">Un ${typeName.split(' ')[1].toLowerCase()} lavora su un turno unico: l'orario è fisso e l'affitto è pieno.</div>` : ''}
+  `;
+}
+
 renderZoneOptions();
+updateSetupRecap();
 
 function startGame() {
   const nameInp = document.getElementById('rest-name-inp').value.trim();
-  G.restName = nameInp || 'La Bella Italia';
+  if (!nameInp) { toast('✏️ Dai un nome al tuo locale'); document.getElementById('rest-name-inp').focus(); return; }
+  G.restName = nameInp;
   G.restType = chosenType;
   G.restTypeEl = 'pizzeria';
   G.ownedLocs = [chosenType];
