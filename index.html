@@ -244,22 +244,22 @@ body::after{
 .hdr-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .hdr-name-wrap{display:flex;align-items:center;gap:7px;min-width:0;flex:1;overflow:hidden}
 .rest-name{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* Scorciatoia agli Upgrade accanto al nome — apre la scheda da qualunque schermata */
-.upg-shortcut{
-  display:flex;align-items:center;gap:4px;flex-shrink:0;
-  background:var(--glass2);border:1px solid rgba(255,149,0,.4);border-radius:999px;
-  padding:2px 8px 2px 2px;cursor:pointer;transition:transform .18s var(--bounce);
+/* Scorciatoie tonde nella riga del livello: Upgrade e Trofei, stessa misura del cerchio livello */
+.hdr-icon-btn{
+  position:relative;width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  background:var(--glass2);border:1px solid rgba(255,149,0,.4);cursor:pointer;
+  transition:transform .18s var(--bounce);
 }
-.upg-shortcut:active{transform:scale(.92)}
-.upg-shortcut .circ{
-  width:18px;height:18px;border-radius:50%;flex-shrink:0;
-  background:var(--grad-brand);color:#1a0a00;font-size:10px;
-  display:flex;align-items:center;justify-content:center;
+.hdr-icon-btn:active{transform:scale(.88)}
+.hdr-icon-btn .badge{
+  position:absolute;top:-3px;right:-3px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;
+  background:var(--grad-brand);color:#1a0a00;font-size:9px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px -1px rgba(0,0,0,.5);
 }
-.upg-shortcut .n{font-size:10px;font-weight:800;color:var(--amber)}
-.upg-shortcut.none{opacity:.55}
-.upg-shortcut.none .circ{background:rgba(255,255,255,.1);color:var(--txt2)}
-.upg-shortcut.none .n{color:var(--txt2)}
+.upg-shortcut.none{opacity:.5;border-color:var(--hair)}
+/* I trofei arriveranno più avanti: icona presente ma inattiva */
+.trophy-shortcut{opacity:.45;border-color:var(--hair);cursor:default}
 /* Stelle/recensioni ora accanto al nome invece che su una riga a parte */
 .hdr-rating-inline{display:flex;align-items:center;gap:4px;flex-shrink:0;min-width:0}
 .hr-stars{color:var(--gold);font-size:11px;letter-spacing:.5px;text-shadow:0 0 10px rgba(255,210,63,.5)}
@@ -345,28 +345,6 @@ body::after{
 
 /* ── RESTAURANT VIEW ── */
 #vrest{padding:8px}
-.day-strip{
-  display:flex;justify-content:space-between;align-items:center;
-  background:var(--glass1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-radius:18px;padding:10px 14px;margin-bottom:8px;
-  border:1px solid var(--hair);box-shadow:var(--sh-sm), inset 0 1px 0 rgba(255,255,255,.06);
-}
-.day-left .dn{font-size:10px;color:var(--txt3);font-weight:700;letter-spacing:.8px;text-transform:uppercase}
-.day-left .dv{font-size:15px;font-weight:800;color:var(--txt);font-variant-numeric:tabular-nums}
-.open-pill{
-  padding:6px 15px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.5px;
-  transition:all .3s var(--ease);
-}
-.open-pill.open{
-  background:var(--grad-green);color:#00291d;
-  box-shadow:0 0 0 3px rgba(0,214,143,.16), 0 6px 20px -8px rgba(0,214,143,.9);
-  animation:openPulse 2.4s ease-in-out infinite;
-}
-@keyframes openPulse{
-  0%,100%{box-shadow:0 0 0 3px rgba(0,214,143,.16), 0 6px 20px -8px rgba(0,214,143,.9)}
-  50%    {box-shadow:0 0 0 7px rgba(0,214,143,0),  0 6px 26px -6px rgba(0,214,143,1)}
-}
-.open-pill.closed{background:rgba(255,77,106,.14);color:var(--red);border:1px solid rgba(255,77,106,.45)}
 
 /* floor */
 .floor{
@@ -385,7 +363,7 @@ body::after{
   transform:skewX(-18deg);animation:floorSweep 7s ease-in-out infinite;pointer-events:none;
 }
 @keyframes floorSweep{0%{left:-40%}60%{left:110%}100%{left:110%}}
-.floor-title{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;position:relative}
+.floor-title{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;position:relative;text-align:center}
 .tables-list{display:flex;flex-direction:column;gap:4px;position:relative}
 
 /* tables (dense list rows) — un accento colorato a sinistra + numero colorato invece di
@@ -434,6 +412,9 @@ body::after{
 .tbl-row.t-cleaning{border-left-color:var(--purple)}
 .tbl-row.t-cleaning .tr-num{background:var(--purple);color:#fff;animation:spin 1.1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* Riga di un ordine in cucina — stesso linguaggio visivo dei tavoli, accento ambra */
+.tbl-row.t-kitchen{border-left-color:var(--amber)}
+.tbl-row.t-kitchen .tr-num{background:var(--amber);color:#1a0a00}
 .tr-body{flex:1;min-width:0}
 .tr-dish{font-size:11.5px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tr-meta{font-size:9.5px;color:var(--txt2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
@@ -449,49 +430,17 @@ body::after{
 .tr-timer.purple{color:var(--purple)}
 
 /* kitchen (list rows) */
+/* Cucina: stesso pannello e stesse righe dense della Sala, solo con accento ambra */
 .kitchen{
-  background:linear-gradient(180deg, rgba(255,149,0,.10), rgba(255,107,53,.05));
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,149,0,.24);
-  border-radius:20px;padding:11px 12px;margin-bottom:8px;
-  box-shadow:var(--sh-sm), inset 0 1px 0 rgba(255,255,255,.06);
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255,149,0,.18) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(40,28,74,.72), rgba(18,12,36,.82));
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-radius:24px;border:1px solid var(--hair);padding:14px 10px 12px;
+  margin-bottom:8px;position:relative;overflow:hidden;
+  box-shadow:var(--sh-md), inset 0 1px 0 rgba(255,255,255,.08);
 }
-.kitch-head{display:flex;align-items:center;gap:7px;margin-bottom:9px}
-.kitch-head>span:first-child{animation:flame 1.6s ease-in-out infinite;transform-origin:50% 90%}
-@keyframes flame{
-  0%,100%{transform:scale(1) rotate(-4deg)}
-  50%    {transform:scale(1.16) rotate(4deg)}
-}
-.kitch-label{font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--amber)}
-.orders-list{display:flex;flex-direction:column;gap:6px}
-.order-row{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.05);border-radius:14px;
-  padding:7px 10px;font-size:12px;border:1px solid var(--hair);
-  transition:background .3s,border-color .3s;
-}
-.order-tnum{
-  width:26px;height:26px;border-radius:50%;flex-shrink:0;
-  background:rgba(255,149,0,.16);border:1px solid rgba(255,149,0,.35);
-  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:var(--amber);
-}
-.order-body{flex:1;min-width:0}
-.order-top{display:flex;align-items:center;gap:6px}
-.order-ico{font-size:16px}
-.order-name{font-size:12px;color:var(--txt);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.order-time{font-size:10px;color:var(--amber);font-weight:800;font-variant-numeric:tabular-nums}
-.order-bar{height:4px;background:rgba(255,255,255,.09);border-radius:999px;margin-top:5px;overflow:hidden}
-.order-bar-fill{
-  height:100%;background:var(--grad-brand);border-radius:999px;
-  transition:width .5s linear;position:relative;overflow:hidden;
-  box-shadow:0 0 10px rgba(255,149,0,.6);
-}
-.order-bar-fill::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
-  transform:translateX(-100%);animation:shimmer 1.6s ease-in-out infinite;
-}
-.kitch-empty{font-size:12px;color:var(--txt3);padding:4px 0}
+.kitch-empty{font-size:12px;color:var(--txt3);padding:4px 0;text-align:center}
 
 /* stats strip */
 .stats-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:8px}
@@ -1036,15 +985,24 @@ body::after{
   0%,100%{box-shadow:0 0 0 0 rgba(255,77,106,.35), inset 0 1px 0 rgba(255,255,255,.08)}
   50%    {box-shadow:0 0 0 7px rgba(255,77,106,0), inset 0 1px 0 rgba(255,255,255,.08)}
 }
+/* Banner di stato turno: centrato e compatto — è l'unico punto dove si legge se il
+   locale è chiuso/in pausa tra i turni, quindi deve essere immediato da leggere */
 #shift-banner{
   background:linear-gradient(120deg, rgba(255,149,0,.20), rgba(255,210,63,.08));
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:2px solid var(--amber);border-radius:16px;padding:11px 13px;margin-bottom:8px;
-  font-size:12px;font-weight:700;color:var(--amber);line-height:1.45;
-  align-items:center;justify-content:space-between;gap:10px;
+  border:2px solid var(--amber);border-radius:16px;padding:10px 13px;margin-bottom:8px;
+  font-size:12px;font-weight:700;color:var(--amber);line-height:1.4;
+  flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
 }
-#shift-banner .hire-btn{animation:playPulse 1.6s ease-in-out infinite}
+.next-shift-btn{
+  padding:8px 18px;border-radius:999px;font-size:12px;font-weight:800;
+  border:none;cursor:pointer;background:var(--grad-brand);color:#1a0a00;
+  box-shadow:0 6px 18px -7px rgba(255,61,154,.85);
+  transition:transform .2s var(--bounce);
+  animation:playPulse 1.6s ease-in-out infinite;
+}
+.next-shift-btn:active{transform:scale(.92)}
 
 /* ── ONBOARDING BAR ── */
 #onboard-bar{
@@ -1115,9 +1073,6 @@ body::after{
   <div class="hdr-row1">
     <div class="hdr-name-wrap">
       <div class="rest-name" id="hdr-name">La Bella Italia</div>
-      <button class="upg-shortcut" id="upg-shortcut" onclick="showView('upg', null)" title="Upgrade">
-        <span class="circ">⬆️</span><span class="n" id="upg-shortcut-n">0</span>
-      </button>
       <span class="hdr-rating-inline">
         <span class="hr-stars" id="hr-stars">☆☆☆☆☆</span>
         <span class="hr-num" id="hr-num">Nuovo locale</span>
@@ -1134,6 +1089,10 @@ body::after{
         </svg>
         <span class="lvl-ring-num" id="hdr-lvl">1</span>
       </div>
+      <button class="hdr-icon-btn upg-shortcut" id="upg-shortcut" onclick="showView('upg', null)" title="Upgrade">
+        ⬆️<span class="badge" id="upg-shortcut-n" style="display:none"></span>
+      </button>
+      <button class="hdr-icon-btn trophy-shortcut" id="trophy-shortcut" title="Trofei — presto disponibili">🏆</button>
       <div class="hdr-budget" id="hdr-money-btn" onclick="openMoneyModal()"><span id="hdr-money">€500</span></div>
     </div>
     <div class="speed-controls">
@@ -1149,40 +1108,20 @@ body::after{
 
   <!-- RESTAURANT VIEW -->
   <div id="vrest" class="view on">
-    <div class="day-strip">
-      <div class="day-left">
-        <div class="dn">Orario</div>
-        <div class="dv" id="dstrip-time">11:00</div>
-      </div>
-      <div class="day-left">
-        <div class="dn">Giorno</div>
-        <div class="dv" id="dstrip-day">1</div>
-      </div>
-      <div class="day-left">
-        <div class="dn">Turno</div>
-        <div class="dv" id="dstrip-mode" style="font-size:12px">☀️🌙</div>
-      </div>
-      <div class="open-pill closed" id="open-pill">CHIUSO</div>
-    </div>
-
     <div id="chef-banner" style="display:none"></div>
     <div id="shift-banner" style="display:none"></div>
 
     <div class="queue-strip" id="queue-strip"></div>
 
     <div class="floor">
-      <div class="floor-title">🍽 Sala — <span id="floor-loc">Pizzeria</span> · <span id="floor-capacity">0/0</span> coperti in servizio · tocca un tavolo libero per accomodare</div>
+      <div class="floor-title">🍽️ Sala - <span id="floor-loc">Pizzeria</span> · <span id="floor-capacity">0/0</span> coperti</div>
       <div class="tables-list" id="tables-grid">
         <!-- generated by JS -->
       </div>
     </div>
 
     <div class="kitchen" id="kitchen-area">
-      <div class="kitch-head">
-        <span style="font-size:16px">🔥</span>
-        <span class="kitch-label">Cucina</span>
-        <span style="font-size:11px;color:var(--txt3);margin-left:auto" id="kitchen-cap"></span>
-      </div>
+      <div class="floor-title">🔥 Cucina - <span id="kitchen-loc">Pizzeria</span> · <span id="kitchen-cap">0/0 ordini</span></div>
       <div class="orders-list" id="orders-wrap">
         <div class="kitch-empty">Cucina libera</div>
       </div>
@@ -1214,8 +1153,6 @@ body::after{
 
   <!-- MENU VIEW -->
   <div id="vmenu" class="view">
-    <div class="vtitle">Menu</div>
-    <div class="vsub" id="menu-vsub">Scegli cosa servire. Attivi: <b id="menu-count">0</b></div>
     <div class="cat-bar" id="cat-bar">
       <div class="cat-btn" data-type="pizzeria" title="Pizzeria" onclick="filterMenuType(this)">🍕</div>
       <div class="cat-btn" data-type="ristorante" title="Ristorante" onclick="filterMenuType(this)">🍽️</div>
@@ -1230,8 +1167,6 @@ body::after{
 
   <!-- STAFF VIEW -->
   <div id="vstaff" class="view">
-    <div class="vtitle">Staff</div>
-    <div class="vsub">3 candidati al giorno per ruolo, stelle diverse = costo e abilità diverse</div>
     <div class="wages-bar">
       <div class="wb-label">💸 Stipendi giornalieri</div>
       <div class="wb-val" id="wages-total">€0 / giorno</div>
@@ -1265,8 +1200,6 @@ body::after{
 
   <!-- WAREHOUSE VIEW -->
   <div id="vwh" class="view">
-    <div class="vtitle">Magazzino</div>
-    <div class="vsub">Gestisci scorte e fornitori — gli ingredienti non sono infiniti</div>
     <div class="wh-tabs">
       <div class="wh-tab on" id="wh-tab-scorte" onclick="showWhTab('scorte')">📦 Scorte</div>
       <div class="wh-tab" id="wh-tab-fornitori" onclick="showWhTab('fornitori')">🚚 Fornitori</div>
@@ -2900,7 +2833,9 @@ function updateUpgradeShortcut() {
   if (!btn) return;
   let n = UPGRADES_DEF.filter(u => !G.upgrades.has(u.id) && G.level >= u.lvl && G.money >= u.cost).length;
   if (G.tableCount < G.maxTables && G.money >= G.tableCost) n++;
-  document.getElementById('upg-shortcut-n').textContent = n;
+  const badge = document.getElementById('upg-shortcut-n');
+  badge.textContent = n;
+  badge.style.display = n > 0 ? '' : 'none';
   btn.classList.toggle('none', n === 0);
 }
 
@@ -2937,14 +2872,6 @@ function openMoneyModal() {
 }
 
 function renderRestaurantView() {
-  // Time strip
-  document.getElementById('dstrip-time').textContent = fmtTime(G.gameTime);
-  document.getElementById('dstrip-mode').textContent = { pranzo: '☀️ Pranzo', cena: '🌙 Cena', both: '🕐 Tutto il giorno' }[G.openMode];
-  document.getElementById('dstrip-day').textContent = G.day;
-  const pill = document.getElementById('open-pill');
-  if (G.isOpen) { pill.textContent = 'APERTO'; pill.className = 'open-pill open'; }
-  else          { pill.textContent = 'CHIUSO'; pill.className = 'open-pill closed'; }
-
   // Floor location name
   document.getElementById('floor-loc').textContent = getActiveLoc().name;
   document.getElementById('floor-capacity').textContent = `${G.tables.filter(t => t).length}/${G.tableCount}`;
@@ -2965,14 +2892,9 @@ function renderRestaurantView() {
     bannerHtml = `<span>🔒 Prepara la sala per il turno successivo!</span>`;
   } else if (!inWindowNow && G.gameTime < closing) {
     if (!isPremisesClear()) {
-      const left = [];
-      if (G.tables.some(t => t)) left.push(`${G.tables.filter(t => t).length} tavoli`);
-      if (G.queue.length) left.push(`${G.queue.length} in coda`);
-      if (G.kitchen.length) left.push(`${G.kitchen.length} in cucina`);
-      if (G.takeoutReady.length) left.push(`${G.takeoutReady.length} asporto`);
-      bannerHtml = `<span>👏 Turno finito! Lo staff non lavora più fuori turno, finisci tu: ${left.join(', ')}.</span>`;
+      bannerHtml = `<span>🔒 Prepara la sala per il turno successivo!</span>`;
     } else {
-      bannerHtml = `<span>👏 Turno finito! Si riparte alle ${fmtTime(nextWindowStart())}</span><button class="hire-btn hire-b" onclick="skipToNextShift()">Prossimo turno →</button>`;
+      bannerHtml = `<span>👏 Turno finito! Si riparte alle ${fmtTime(nextWindowStart())}</span><button class="next-shift-btn" onclick="skipToNextShift()">Prossimo turno →</button>`;
     }
   }
   // Only rewrite when the text actually changes, otherwise the button is recreated mid-tap and swallows clicks
@@ -2982,14 +2904,20 @@ function renderRestaurantView() {
     shiftBanner.style.display = bannerHtml ? 'flex' : 'none';
   }
 
-  // Waiting queue: one line, fixed size, reused node so the urgent pulse doesn't restart each tick
+  // Waiting queue: one line, fixed size, reused node so the urgent pulse doesn't restart each tick.
+  // A locale chiuso è già segnalato dal banner sopra, quindi qui non si ripete il messaggio.
   const qwrap = document.getElementById('queue-strip');
-  if (!qwrap.firstElementChild) qwrap.innerHTML = '<div class="queue-empty"></div>';
-  const qEl = qwrap.firstElementChild;
-  if (!G.queue.length) {
-    setClass(qEl, 'queue-empty');
-    setText(qEl, G.isOpen ? '🚪 Nessun cliente in attesa' : '🌙 Locale chiuso');
+  if (!G.isOpen) {
+    qwrap.style.display = 'none';
+  } else if (!G.queue.length) {
+    qwrap.style.display = '';
+    if (!qwrap.firstElementChild) qwrap.innerHTML = '<div class="queue-empty"></div>';
+    setClass(qwrap.firstElementChild, 'queue-empty');
+    setText(qwrap.firstElementChild, '🚪 Nessun cliente in attesa');
   } else {
+    qwrap.style.display = '';
+    if (!qwrap.firstElementChild) qwrap.innerHTML = '<div class="queue-empty"></div>';
+    const qEl = qwrap.firstElementChild;
     const mostUrgent = Math.min(...G.queue.map(q => q.patience));
     const urgent = mostUrgent < 4;
     const n = G.queue.length;
@@ -3077,8 +3005,9 @@ function renderRestaurantView() {
     row.onclick = click;
   });
 
-  // Kitchen — same node-reuse approach so the shimmer on progress bars stays smooth
+  // Kitchen — stesse righe dense della Sala (stesso node-reuse per non far ripartire le animazioni)
   const cap = kitchenCapacity();
+  setText(document.getElementById('kitchen-loc'), getActiveLoc().name);
   document.getElementById('kitchen-cap').textContent = `${G.kitchen.length}/${cap} ordini`;
   const wrap = document.getElementById('orders-wrap');
   const shown = G.kitchen.slice(0, 10);
@@ -3089,25 +3018,23 @@ function renderRestaurantView() {
     if (empty) wrap.innerHTML = '';
     syncChildren(wrap, shown.length, () => {
       const d = document.createElement('div');
-      d.className = 'order-row';
-      d.innerHTML = `<div class="order-tnum"></div>
-        <div class="order-body">
-          <div class="order-top">
-            <span class="order-ico"></span><span class="order-name"></span><span class="order-time"></span>
-          </div>
-          <div class="order-bar"><div class="order-bar-fill"></div></div>
-        </div>`;
+      d.className = 'tbl-row t-kitchen';
+      d.innerHTML = `<div class="tr-num"></div>
+        <div class="tr-body">
+          <div class="tr-dish"></div>
+          <div class="tr-meta"></div>
+        </div>
+        <div class="tr-timer amber"><span class="dot"></span><span class="tr-timer-txt"></span></div>`;
       return d;
     });
     shown.forEach((k, idx) => {
       const r = getRecipe(k.recipeId);
       if (!r) return;
       const row = wrap.children[idx];
-      setText(row.querySelector('.order-tnum'), k.takeout ? '🥡' : String(k.tableIdx + 1));
-      setText(row.querySelector('.order-ico'), r.e);
-      setText(row.querySelector('.order-name'), k.takeout ? `Asporto: ${k.qty}× ${r.name}` : r.name);
-      setText(row.querySelector('.order-time'), `${Math.max(0, Math.ceil(k.total - k.progress))}'`);
-      row.querySelector('.order-bar-fill').style.width = Math.min(100, k.progress / k.total * 100) + '%';
+      setText(row.querySelector('.tr-num'), k.takeout ? '🥡' : String(k.tableIdx + 1));
+      setText(row.querySelector('.tr-dish'), `${r.e} ${r.name}`);
+      setText(row.querySelector('.tr-meta'), k.takeout ? `Asporto ×${k.qty}` : `Tavolo ${k.tableIdx + 1}`);
+      setText(row.querySelector('.tr-timer-txt'), `${Math.max(0, Math.ceil(k.total - k.progress))}'`);
     });
   }
 
@@ -3206,14 +3133,11 @@ function renderMenu(viewType) {
 
   const readOnly = currentMenuType !== G.restType;
   const hasManager = !readOnly && !!G.managers[G.activeLoc];
-  document.getElementById('menu-readonly-note').style.display = readOnly ? '' : 'none';
-  document.getElementById('menu-readonly-note').innerHTML = readOnly ? '🔒 Solo visualizzazione — gestibile solo nel tuo locale' : '';
+  const note = document.getElementById('menu-readonly-note');
+  if (readOnly) { note.style.display = ''; note.innerHTML = '🔒 Solo visualizzazione — gestibile solo nel tuo locale'; }
+  else if (hasManager) { note.style.display = ''; note.innerHTML = `🧑‍💼 ${G.managers[G.activeLoc].name} gestisce i prezzi ogni giorno (puoi comunque intervenire)`; }
+  else { note.style.display = 'none'; }
   const typeFiltered = RECIPES.filter(r => r.types.includes(currentMenuType));
-  document.getElementById('menu-vsub').innerHTML = readOnly
-    ? `Anteprima del menù — non gestibile da qui`
-    : hasManager
-      ? `🧑‍💼 ${G.managers[G.activeLoc].name} gestisce i prezzi ogni giorno (puoi comunque intervenire). Attivi: <b>${G.activeMenu.size}</b>`
-      : `Scegli cosa servire (solo aggiunta, i prezzi si modificano liberamente). Attivi: <b>${G.activeMenu.size}</b>`;
 
   const list = document.getElementById('recipes-list');
   const sections = MENU_CAT_ORDER.filter(cat => typeFiltered.some(r => r.cat === cat));
