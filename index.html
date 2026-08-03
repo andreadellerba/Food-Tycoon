@@ -509,7 +509,7 @@ body::after{
 @keyframes blink-play{0%,100%{opacity:1}50%{opacity:.45}}
 
 /* ── MENU VIEW ── */
-.cat-bar{display:flex;gap:10px;align-items:center;overflow-x:auto;padding:4px 2px 12px;margin-bottom:6px;scrollbar-width:none}
+.cat-bar{display:flex;gap:10px;align-items:center;justify-content:center;overflow-x:auto;padding:4px 2px 12px;margin-bottom:6px;scrollbar-width:none}
 .cat-bar::-webkit-scrollbar{display:none}
 .cat-btn{
   background:linear-gradient(160deg, rgba(255,255,255,.22), rgba(255,255,255,.03) 65%), var(--glass2);
@@ -2958,7 +2958,7 @@ function renderRestaurantView() {
     if (G.queue.length) left.push(`${G.queue.length} in coda`);
     if (G.kitchen.length) left.push(`${G.kitchen.length} in cucina`);
     if (G.takeoutReady.length) left.push(`${G.takeoutReady.length} asporto`);
-    bannerHtml = `<span>🔒 Orario finito, ma devi ancora chiudere: ${left.join(', ')}. Senza assistente/cameriere tocca a te.</span>`;
+    bannerHtml = `<span>🔒 Prepara la sala per il turno successivo! Resta: ${left.join(', ')}.</span>`;
   } else if (!inWindowNow && G.gameTime < closing) {
     if (!isPremisesClear()) {
       const left = [];
