@@ -264,36 +264,36 @@ body::after{
 @keyframes shimmer{to{transform:translateX(200%)}}
 
 /* ── MAIN ── */
-#main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:1;overscroll-behavior-y:contain}
+#main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:1;overscroll-behavior-y:contain;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 92px)}
 #main::-webkit-scrollbar{width:0}
 
-/* ── BOTTOM NAV ── */
+/* ── BOTTOM NAV — barra ovale flottante in stile Apple, staccata dal bordo inferiore ── */
 #nav{
-  background:linear-gradient(180deg,rgba(30,20,56,.82),rgba(16,10,32,.94));
-  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
-  border-top:1px solid var(--hair);
-  display:flex;padding:8px 8px calc(env(safe-area-inset-bottom,8px) + 4px);flex-shrink:0;
-  gap:6px;position:relative;z-index:10;
-  box-shadow:0 -8px 26px -14px rgba(0,0,0,.95);
+  position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
+  max-width:398px;margin:0 auto;
+  background:linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.02) 60%), var(--glass2);
+  backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
+  border:1px solid rgba(255,255,255,.18);border-radius:999px;
+  display:flex;padding:7px;gap:3px;z-index:200;
+  box-shadow:0 16px 40px -12px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -1px 0 rgba(0,0,0,.2);
 }
 .nb{
   flex:1;display:flex;align-items:center;justify-content:center;
-  padding:11px 2px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:999px;
+  padding:13px 2px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:999px;
   transition:background .25s var(--ease),border-color .25s,transform .2s var(--bounce),box-shadow .25s;
   position:relative;
 }
-.nb .ni{font-size:24px;transition:transform .35s var(--bounce);display:block}
+.nb .ni{font-size:23px;transition:transform .35s var(--bounce);display:block}
 /* Il nome resta per l'accessibilità ma è nascosto visivamente: le pill mostrano solo l'icona */
 .nb .nl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .nb:active .ni{transform:scale(.85)}
+/* Highlight ampio (tutta la cella del pulsante), non un cerchietto stretto */
 .nb.on{
-  background:linear-gradient(160deg, rgba(255,255,255,.24), rgba(255,255,255,.04) 65%), var(--glass2);
-  backdrop-filter:blur(14px) saturate(180%);-webkit-backdrop-filter:blur(14px) saturate(180%);
-  border-color:rgba(255,255,255,.25);
-  box-shadow:0 8px 20px -8px rgba(255,149,0,.6), inset 0 1px 0 rgba(255,255,255,.4);
-  transform:translateY(-2px);
+  background:linear-gradient(160deg, rgba(255,255,255,.28), rgba(255,255,255,.05) 65%), var(--glass1);
+  border-color:rgba(255,255,255,.28);
+  box-shadow:0 8px 20px -8px rgba(255,149,0,.6), inset 0 1px 0 rgba(255,255,255,.45);
 }
-.nb.on .ni{transform:scale(1.18);filter:drop-shadow(0 4px 10px rgba(255,149,0,.7))}
+.nb.on .ni{transform:scale(1.15);filter:drop-shadow(0 4px 10px rgba(255,149,0,.7))}
 
 /* ── VIEWS ── */
 .view{display:none;padding:10px}
@@ -1040,7 +1040,7 @@ body::after{
 #onboard-bar{
   background:linear-gradient(180deg,rgba(42,30,74,.96),rgba(22,14,44,.98));
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border-top:2px solid var(--amber);padding:12px 14px;
+  border-top:2px solid var(--amber);padding:12px 14px calc(env(safe-area-inset-bottom,0px) + 92px);
   box-shadow:0 -12px 34px -14px rgba(0,0,0,.95);
 }
 #onboard-checklist{font-size:12px;color:var(--txt2);margin-bottom:9px;line-height:1.7}
