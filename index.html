@@ -1023,15 +1023,24 @@ body::after{
 <body class="setup-active">
 <script>
 // Fix per un bug noto di Safari iOS: vh/dvh/svh calcolano male l'altezza reale
-// quando la barra degli indirizzi mostra/nasconde. Usiamo l'altezza vera della
-// finestra (window.innerHeight), sempre corretta, come sorgente di verità.
+// quando la barra degli indirizzi mostra/nasconde. Usiamo l'altezza vera dello
+// schermo, sempre corretta, come sorgente di verità — e ascoltiamo visualViewport,
+// non solo "resize" della finestra: su iOS il resize della window NON scatta sempre
+// quando la barra di Safari si nasconde/riappare durante lo scroll, mentre
+// visualViewport.resize sì. Senza questo, l'altezza restava "congelata" al valore
+// misurato con la barra visibile, lasciando un vuoto in fondo quando la barra si nasconde.
 (function () {
   function setVH() {
-    document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+    const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
   }
   setVH();
   window.addEventListener('resize', setVH);
   window.addEventListener('orientationchange', setVH);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', setVH);
+    window.visualViewport.addEventListener('scroll', setVH);
+  }
 })();
 </script>
 
