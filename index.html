@@ -15,6 +15,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%8D%95%3C/text%3E%3C/svg%3E">
 <style>
 :root {
+  --vh: 1vh;
   --bg:      #0B0716;
   --s1:      #1A1230;
   --s2:      #23193F;
@@ -51,7 +52,7 @@ body{
   background:var(--bg);color:var(--txt);
   max-width:430px;margin:0 auto;
   display:flex;flex-direction:column;
-  height:100vh;height:100dvh;
+  height:100vh;height:100dvh;height:calc(var(--vh) * 100);
   user-select:none;position:relative;
   /* Mobile: no pull-to-refresh (ricaricherebbe la partita) e nessun ritardo sui tap */
   overscroll-behavior-y:contain;touch-action:manipulation;
@@ -89,7 +90,7 @@ body::after{
 
 /* ── SETUP ── */
 #setup{
-  position:fixed;top:0;left:0;right:0;height:100vh;height:100svh;
+  position:fixed;top:0;left:0;right:0;height:100vh;height:100svh;height:calc(var(--vh) * 100);
   background:radial-gradient(ellipse at 50% 0%,#2b1d52 0%,var(--bg) 62%);
   z-index:9000;overflow-y:auto;
   display:flex;flex-direction:column;align-items:center;
@@ -706,7 +707,7 @@ body::after{
 
 /* ── MODALS / OVERLAYS ── */
 .overlay{
-  position:fixed;top:0;left:0;right:0;height:100vh;height:100svh;background:rgba(4,2,10,.72);z-index:1000;
+  position:fixed;top:0;left:0;right:0;height:100vh;height:100svh;height:calc(var(--vh) * 100);background:rgba(4,2,10,.72);z-index:1000;
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   display:flex;align-items:flex-end;animation:fadein .25s var(--ease);
 }
@@ -1053,6 +1054,19 @@ body::after{
 </style>
 </head>
 <body>
+<script>
+// Fix per un bug noto di Safari iOS: vh/dvh/svh calcolano male l'altezza reale
+// quando la barra degli indirizzi mostra/nasconde. Usiamo l'altezza vera della
+// finestra (window.innerHeight), sempre corretta, come sorgente di verità.
+(function () {
+  function setVH() {
+    document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+  }
+  setVH();
+  window.addEventListener('resize', setVH);
+  window.addEventListener('orientationchange', setVH);
+})();
+</script>
 
 <!-- SETUP SCREEN -->
 <div id="setup">
