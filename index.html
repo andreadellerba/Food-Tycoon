@@ -131,6 +131,18 @@ body::after{
 @keyframes gradShift{to{background-position:300% 0}}
 .setup-sub{font-size:13px;color:var(--txt2);text-align:center;margin-bottom:26px}
 .setup-label{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);margin-bottom:8px;align-self:flex-start}
+.city-label{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.city-label #city-name{color:var(--txt);font-size:13px;letter-spacing:1px;transition:opacity .2s}
+.city-label .city-sub{text-transform:none;letter-spacing:normal;font-weight:600;color:var(--txt2)}
+.city-refresh{
+  background:var(--glass2);border:1px solid var(--hair);border-radius:999px;
+  width:26px;height:26px;font-size:13px;color:var(--txt2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:transform .3s var(--bounce);
+}
+.city-refresh:active{transform:rotate(180deg) scale(.9)}
+.city-refresh.spin{animation:citySpin .5s var(--ease)}
+@keyframes citySpin{to{transform:rotate(360deg)}}
 .setup-input{
   width:100%;background:var(--glass2);border:2px solid var(--s3);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -160,7 +172,6 @@ body::after{
 .type-opt span{display:block;font-size:28px;margin-bottom:4px;transition:transform .25s var(--bounce)}
 .type-opt.sel span{transform:scale(1.18) rotate(-6deg)}
 .type-opt b{font-size:12px;font-weight:700;color:var(--txt)}
-.type-opt small{display:block;font-size:9px;font-weight:600;color:var(--txt2);margin-top:1px}
 .zone-row{display:flex;flex-direction:column;gap:8px;width:100%;margin-bottom:22px}
 .zone-opt{
   background:var(--glass2);border:2px solid var(--s3);border-radius:16px;
@@ -232,18 +243,10 @@ body::after{
 }
 .hdr-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .rest-name{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--txt)}
-.lvl-badge{
-  background:var(--grad-brand);color:#1a0a00;border-radius:999px;
-  padding:3px 12px;font-size:11px;font-weight:900;letter-spacing:.5px;
-  box-shadow:0 4px 14px -4px rgba(255,61,154,.8), inset 0 1px 0 rgba(255,255,255,.4);
-  transition:transform .3s var(--bounce);
-}
-.lvl-badge.lvl-pop{animation:lvlPop .6s var(--bounce)}
-@keyframes lvlPop{0%{transform:scale(1)}40%{transform:scale(1.35) rotate(-6deg)}100%{transform:scale(1)}}
-.hdr-rating{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.hdr-rating{display:flex;align-items:center;gap:6px;margin-bottom:7px}
 .hr-stars{color:var(--gold);font-size:13px;letter-spacing:1px;text-shadow:0 0 12px rgba(255,210,63,.5)}
 .hr-num{font-size:12px;font-weight:700;color:var(--txt2)}
-.hdr-row2{display:flex;gap:12px;align-items:center;margin-bottom:5px}
+.hdr-row2{display:flex;gap:10px;align-items:center}
 .hstat{
   display:flex;align-items:center;gap:5px;font-size:14px;font-weight:700;
   font-variant-numeric:tabular-nums;background:rgba(255,255,255,.07);
@@ -256,19 +259,22 @@ body::after{
 @keyframes cashPop{0%{transform:scale(1)}45%{transform:scale(1.14);box-shadow:0 0 22px -4px rgba(255,210,63,.9)}100%{transform:scale(1)}}
 .hstat.time-s{color:var(--txt2);font-size:12px;font-weight:600;background:transparent;border-color:transparent;padding:4px 0}
 .hstat .ico{font-size:13px}
-.xp-wrap{background:rgba(255,255,255,.08);border-radius:999px;height:5px;overflow:hidden;position:relative}
-.xp-fill{
-  background:var(--grad-brand);border-radius:999px;height:100%;
-  transition:width .5s var(--ease);position:relative;overflow:hidden;
-  box-shadow:0 0 12px rgba(255,149,0,.7);
+/* Livello: solo il numero, con un anello circolare che si riempie in base all'XP verso il prossimo livello */
+.lvl-ring{position:relative;width:34px;height:34px;flex-shrink:0;transition:transform .3s var(--bounce)}
+.lvl-ring.lvl-pop{animation:lvlPop .6s var(--bounce)}
+@keyframes lvlPop{0%{transform:scale(1)}40%{transform:scale(1.32) rotate(-6deg)}100%{transform:scale(1)}}
+.lvl-ring-svg{width:100%;height:100%;transform:rotate(-90deg)}
+.lvl-ring-bg{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.14);stroke-width:3}
+.lvl-ring-fg{
+  fill:none;stroke:#FF9500;stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:106.8;stroke-dashoffset:106.8;
+  transition:stroke-dashoffset .6s var(--ease);
+  filter:drop-shadow(0 0 5px rgba(255,149,0,.8));
 }
-/* Shimmer traveling along the XP bar */
-.xp-fill::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
-  transform:translateX(-100%);animation:shimmer 2.2s ease-in-out infinite;
+.lvl-ring-num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:var(--txt);letter-spacing:-.3px;
 }
-@keyframes shimmer{to{transform:translateX(200%)}}
 
 /* ── MAIN ── */
 #main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:1;overscroll-behavior-y:contain;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 92px)}
@@ -493,7 +499,9 @@ body::after{
 .sv.gold{color:var(--gold);text-shadow:0 0 16px rgba(255,210,63,.45)}
 
 /* speed/pause btn */
-.speed-controls{position:fixed;top:calc(env(safe-area-inset-top,0px) + 44px);right:10px;z-index:200;display:flex;gap:6px}
+/* Il top viene impostato via JS (positionSpeedControls) in base all'altezza reale dell'header,
+   così restano sempre subito sotto di esso qualunque sia il layout/dispositivo */
+.speed-controls{position:fixed;top:70px;right:10px;z-index:200;display:flex;gap:6px}
 .speed-btn,.pause-btn{
   background:var(--glass2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid var(--hair);border-radius:999px;
@@ -1094,11 +1102,14 @@ body::after{
   </div>
   <div class="setup-label" id="openmode-label">Orari di apertura</div>
   <div class="type-row" id="openmode-row">
-    <div class="type-opt" data-mode="pranzo" onclick="selOpenMode(this)"><span>☀️</span><b>Pranzo</b><small id="om-pranzo-h"></small></div>
-    <div class="type-opt" data-mode="cena" onclick="selOpenMode(this)"><span>🌙</span><b>Cena</b><small id="om-cena-h"></small></div>
-    <div class="type-opt sel" data-mode="both" onclick="selOpenMode(this)"><span>🕐</span><b>Tutto il giorno</b><small id="om-both-h"></small></div>
+    <div class="type-opt" data-mode="pranzo" onclick="selOpenMode(this)"><span>☀️</span><b>Pranzo</b></div>
+    <div class="type-opt" data-mode="cena" onclick="selOpenMode(this)"><span>🌙</span><b>Cena</b></div>
+    <div class="type-opt sel" data-mode="both" onclick="selOpenMode(this)"><span>🕐</span><b>Tutto il giorno</b></div>
   </div>
-  <div class="setup-label">Zona della città — incide sull'affitto</div>
+  <div class="setup-label city-label">
+    <span>📍 <span id="city-name">TORINO</span> <span class="city-sub">— incide sull'affitto</span></span>
+    <button class="city-refresh" id="city-refresh-btn" onclick="refreshCity()" type="button" title="Cambia città">🔄</button>
+  </div>
   <div class="zone-row" id="zone-row"></div>
   <div class="setup-recap" id="setup-recap"></div>
   <button class="start-btn" id="start-btn" onclick="startGame()" disabled>Scegli un nome per iniziare</button>
@@ -1108,17 +1119,22 @@ body::after{
 <div id="hdr" style="display:none">
   <div class="hdr-row1">
     <div class="rest-name" id="hdr-name">La Bella Italia</div>
-    <div class="lvl-badge" id="hdr-lvl">LV 1</div>
+    <div class="hstat time-s"><span id="hdr-time">11:00</span> · Giorno <span id="hdr-day">1</span></div>
   </div>
   <div class="hdr-rating">
     <span class="hr-stars" id="hr-stars">☆☆☆☆☆</span>
     <span class="hr-num" id="hr-num">Nuovo locale</span>
   </div>
   <div class="hdr-row2">
-    <div class="hstat money" id="hdr-money-btn" onclick="openMoneyModal()"><span class="ico">💰</span><span id="hdr-money">€500</span></div>
-    <div class="hstat time-s"><span id="hdr-time">11:00</span> · Giorno <span id="hdr-day">1</span></div>
+    <div class="lvl-ring" id="lvl-ring">
+      <svg class="lvl-ring-svg" viewBox="0 0 40 40">
+        <circle class="lvl-ring-bg" cx="20" cy="20" r="17"></circle>
+        <circle class="lvl-ring-fg" id="lvl-ring-fg" cx="20" cy="20" r="17"></circle>
+      </svg>
+      <span class="lvl-ring-num" id="hdr-lvl">1</span>
+    </div>
+    <div class="hstat money" id="hdr-money-btn" onclick="openMoneyModal()"><span id="hdr-money">€500</span></div>
   </div>
-  <div class="xp-wrap"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
 </div>
 
 <!-- MAIN -->
@@ -1592,9 +1608,10 @@ const STAFF_ROLES = [
 // Fake city map — where you open shapes daily rent, purchase cost and foot traffic
 const ZONES = [
   { id:'centro',     name:'Centro',     e:'🏙️', rentMult:1.6, costMult:1.4, custMult:1.15, desc:'+15% clienti, affitto alto' },
-  { id:'semicentro', name:'Semicentro', e:'🏘️', rentMult:1.0, costMult:1.0, custMult:1.0,  desc:'Equilibrio tra costi e clientela' },
+  { id:'semicentro', name:'Città',      e:'🏘️', rentMult:1.0, costMult:1.0, custMult:1.0,  desc:'Equilibrio tra costi e clientela' },
   { id:'periferia',  name:'Periferia',  e:'🌳', rentMult:0.6, costMult:0.7, custMult:0.85, desc:'Affitto basso, meno passaggio' },
 ];
+const ITALIAN_CITIES = ['Roma','Milano','Napoli','Torino','Firenze','Bologna','Venezia','Palermo','Genova','Verona','Bari','Catania'];
 const CITY_STREETS = {
   centro:     ['Via Roma','Corso Vittorio','Piazza Duomo','Via Dante'],
   semicentro: ['Via Garibaldi','Viale Trento','Via Mazzini','Via Verdi'],
@@ -2076,26 +2093,7 @@ function selType(el) {
   document.getElementById('openmode-label').textContent = single
     ? 'Orari di apertura — turno unico, non modificabile'
     : 'Orari di apertura';
-  updateOpenModeHours(chosenType);
   updateSetupRecap();
-}
-
-// Mostra tra parentesi gli orari reali di pranzo/cena/tutto il giorno per il tipo scelto
-function updateOpenModeHours(type) {
-  const s = TYPE_SHIFTS[type] || TYPE_SHIFTS.pizzeria;
-  const pranzoEl = document.getElementById('om-pranzo-h');
-  const cenaEl = document.getElementById('om-cena-h');
-  const bothEl = document.getElementById('om-both-h');
-  if (s.single) {
-    const txt = `(${fmtTime(s.single[0])}–${fmtTime(s.single[1])})`;
-    if (pranzoEl) pranzoEl.textContent = '';
-    if (cenaEl) cenaEl.textContent = '';
-    if (bothEl) bothEl.textContent = txt;
-  } else {
-    if (pranzoEl) pranzoEl.textContent = `(${fmtTime(s.pranzo[0])}–${fmtTime(s.pranzo[1])})`;
-    if (cenaEl) cenaEl.textContent = `(${fmtTime(s.cena[0])}–${fmtTime(s.cena[1])})`;
-    if (bothEl) bothEl.textContent = `(${fmtTime(s.pranzo[0])}–${fmtTime(s.pranzo[1])} · ${fmtTime(s.cena[0])}–${fmtTime(s.cena[1])})`;
-  }
 }
 
 let chosenOpenMode = 'both';
@@ -2108,19 +2106,31 @@ function selOpenMode(el) {
 }
 
 let chosenZone = 'semicentro';
+let chosenCity = ITALIAN_CITIES[randInt(0, ITALIAN_CITIES.length - 1)];
 function renderZoneOptions() {
   const wrap = document.getElementById('zone-row');
   if (!wrap) return;
   wrap.innerHTML = ZONES.map(z => {
     const streets = CITY_STREETS[z.id];
     const addr = `${streets[randInt(0, streets.length - 1)]} ${randInt(1, 140)}`;
-    const rentTxt = z.rentMult === 1 ? 'affitto standard' : z.rentMult > 1 ? `+${Math.round((z.rentMult - 1) * 100)}% affitto` : `${Math.round((z.rentMult - 1) * 100)}% affitto`;
+    // Solo una freccia: su/rossa se l'affitto costa di più, giù/verde se costa meno, piatta/grigia se è lo standard
+    const rentArrow = z.rentMult > 1 ? '<span style="color:var(--red)">▲</span>' : z.rentMult < 1 ? '<span style="color:var(--green)">▼</span>' : '<span style="color:var(--txt3)">━</span>';
     return `<div class="zone-opt${z.id === chosenZone ? ' sel' : ''}" data-zone="${z.id}" data-addr="${addr}" onclick="selZone(this)">
       <span class="zo-ico">${z.e}</span>
       <div class="zo-info"><div class="zo-name">${z.name} — ${addr}</div><div class="zo-addr">${z.desc}</div></div>
-      <span class="zo-rent" style="color:${z.rentMult > 1 ? 'var(--red)' : z.rentMult < 1 ? 'var(--green)' : 'var(--txt2)'}">${rentTxt}</span>
+      <span class="zo-rent">${rentArrow}</span>
     </div>`;
   }).join('');
+}
+function refreshCity() {
+  let next;
+  do { next = ITALIAN_CITIES[randInt(0, ITALIAN_CITIES.length - 1)]; } while (next === chosenCity && ITALIAN_CITIES.length > 1);
+  chosenCity = next;
+  const el = document.getElementById('city-name');
+  el.textContent = chosenCity.toUpperCase();
+  const btn = document.getElementById('city-refresh-btn');
+  btn.classList.remove('spin'); void btn.offsetWidth; btn.classList.add('spin');
+  renderZoneOptions();
 }
 function selZone(el) {
   document.querySelectorAll('.zone-opt').forEach(e => e.classList.remove('sel'));
@@ -2173,8 +2183,8 @@ function updateSetupRecap() {
   `;
 }
 
+document.getElementById('city-name').textContent = chosenCity.toUpperCase();
 renderZoneOptions();
-updateOpenModeHours(chosenType);
 updateSetupRecap();
 
 function startGame() {
@@ -2845,7 +2855,7 @@ function showLevelUp() {
   `;
   document.body.appendChild(el);
   confettiBurst(46);
-  const badge = document.getElementById('hdr-lvl');
+  const badge = document.getElementById('lvl-ring');
   if (badge) { badge.classList.remove('lvl-pop'); void badge.offsetWidth; badge.classList.add('lvl-pop'); }
 }
 
@@ -2860,15 +2870,28 @@ function closeLevelUp() {
 // ═══════════════════════════════════════════════════
 //  RENDER
 // ═══════════════════════════════════════════════════
+// Tiene i pulsanti pausa/velocità/reset sempre appena sotto l'header, qualunque sia
+// la sua altezza reale (varia con notch/dispositivo) invece di un offset fisso indovinato
+function positionSpeedControls() {
+  const hdr = document.getElementById('hdr');
+  const ctrls = document.querySelector('.speed-controls');
+  if (!hdr || !ctrls || hdr.style.display === 'none') return;
+  ctrls.style.top = (hdr.getBoundingClientRect().bottom + 8) + 'px';
+}
+window.addEventListener('resize', positionSpeedControls);
+window.addEventListener('orientationchange', positionSpeedControls);
+
 function renderHeader() {
   document.getElementById('hdr-name').textContent = G.restName;
-  document.getElementById('hdr-lvl').textContent = 'LV ' + G.level;
+  document.getElementById('hdr-lvl').textContent = G.level;
   document.getElementById('hdr-money').textContent = fmt(G.money);
   const t = fmtTime(G.gameTime);
   document.getElementById('hdr-time').textContent = t;
   document.getElementById('hdr-day').textContent = G.day;
   const needed = xpForLevel(G.level);
-  document.getElementById('xp-fill').style.width = Math.min(100, G.xp / needed * 100) + '%';
+  const ringCirc = 106.8;
+  const ringPct = Math.min(1, G.xp / needed);
+  document.getElementById('lvl-ring-fg').style.strokeDashoffset = ringCirc * (1 - ringPct);
 
   // Google-Maps-style aggregate rating
   if (G.reviewTotals.count) {
@@ -2880,6 +2903,7 @@ function renderHeader() {
     document.getElementById('hr-stars').textContent = '☆☆☆☆☆';
     document.getElementById('hr-num').textContent = 'Nuovo locale';
   }
+  positionSpeedControls();
 }
 
 // ═══════════════════════════════════════════════════
